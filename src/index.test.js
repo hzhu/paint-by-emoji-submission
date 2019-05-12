@@ -5,7 +5,7 @@ import "jest-dom/extend-expect";
 
 afterEach(cleanup);
 
-test("user should be able to adjust the size of the emoji grid (e.g. 3x3)", () => {
+test("user should be able to adjust size of the grid (e.g. from 10x8 to 3x3)", () => {
   // Given
   const NEW_WIDTH = 3;
   const NEW_HEIGHT = 3;
@@ -30,4 +30,33 @@ test("user should be able to adjust the size of the emoji grid (e.g. 3x3)", () =
     const row = grid.children[i];
     expect(row.children.length).toBe(NEW_WIDTH);
   }
+});
+
+test("user should be able to paint emojis on the grid", () => {
+  // Given
+  const { getByTestId } = render(<EmojiPaint />);
+  const grid = getByTestId("grid");
+  const firstRowCoords = [[0, 0], [0, 1], [0, 2]];
+
+  firstRowCoords.forEach(coord => {
+    const [m, n] = coord;
+    const cell = getByTestId(`cell-${m}-${n}`);
+    expect(cell.textContent).toBe("");
+  });
+
+  // When (user paints in the first three cells of the first row)
+  fireEvent.mouseDown(grid);
+  firstRowCoords.forEach(coord => {
+    const [m, n] = coord;
+    const cell = getByTestId(`cell-${m}-${n}`);
+    fireEvent.mouseEnter(cell);
+  });
+  fireEvent.mouseUp(grid);
+
+  // Then
+  firstRowCoords.forEach(coord => {
+    const [m, n] = coord;
+    const cell = getByTestId(`cell-${m}-${n}`);
+    expect(cell.textContent).toBe("😀");
+  });
 });

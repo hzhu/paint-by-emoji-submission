@@ -144,6 +144,7 @@ const EmojiGrid = ({ grid, onGridUpdate, isPainting, setIsPainting }) => (
           return (
             <div
               key={n}
+              data-testid={`cell-${m}-${n}`}
               className="pa1"
               style={{
                 fontSize: "37px",
