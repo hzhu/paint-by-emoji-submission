@@ -61,7 +61,7 @@ const EmojiPaint = () => {
   };
 
   return (
-    <div className="emoji-paint">
+    <div className="emoji-paint tc">
       <EmojiToolbar
         activeEmoji={activeEmoji}
         setActiveEmoji={setActiveEmoji}
@@ -131,26 +131,41 @@ const EmojiToolbar = ({
 const EmojiGrid = ({ grid, onGridUpdate, isPainting, setIsPainting }) => (
   <div
     data-testid="grid"
+    className="ma4 br3 dib pointer"
+    style={{
+      border: "1px solid #a0a0a2"
+    }}
     onMouseDown={() => setIsPainting(true)}
     onMouseUp={() => setIsPainting(false)}
   >
     {grid.map((row, m) => (
-      <div key={m} data-testid={`row-${m}`} className="row flex">
-        {row.map((element, n) => (
-          <div
-            key={n}
-            className="pa1"
-            style={{ userSelect: "none" }}
-            onMouseDown={() => onGridUpdate(m, n)}
-            onMouseEnter={() => {
-              if (isPainting) {
-                onGridUpdate(m, n);
-              }
-            }}
-          >
-            {element}
-          </div>
-        ))}
+      <div key={m} data-testid={`row-${m}`} className="flex">
+        {row.map((element, n) => {
+          return (
+            <div
+              key={n}
+              className="pa1"
+              style={{
+                fontSize: "37px",
+                width: "45px",
+                height: "45px",
+                userSelect: "none",
+                borderRight:
+                  n === row.length - 1 ? "none" : "1px solid #d5d5d6",
+                borderBottom:
+                  m === grid.length - 1 ? "none" : "1px solid #d5d5d6"
+              }}
+              onMouseDown={() => onGridUpdate(m, n)}
+              onMouseEnter={() => {
+                if (isPainting) {
+                  onGridUpdate(m, n);
+                }
+              }}
+            >
+              {element}
+            </div>
+          );
+        })}
       </div>
     ))}
   </div>
