@@ -1,30 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import EmojiPaint from './emoji-paint';
+import EmojiPaint from "./emoji-paint";
 
-import './app.css';
-
-const EMOJI = [
-	'😀',
-	'😁',
-	'😎',
-	'😘',
-	'⬆️',
-	'➡️',
-	'⬇️',
-	'⬅️',
-	'⚪',
-	'⚫',
-	'🔴',
-	'🔵',
-];
+import "./app.css";
 
 export default class App extends Component {
-	render() {
-		return (
-			<div className="app">
-				<EmojiPaint emoji={EMOJI} />
-			</div>
-		);
-	}
+  render() {
+    return (
+      <div className="app">
+        <EmojiPaint />
+      </div>
+    );
+  }
 }

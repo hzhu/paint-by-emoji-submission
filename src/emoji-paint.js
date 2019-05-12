@@ -1,103 +1,83 @@
-import React, { Component } from 'react';
-import EmojiPicker from './emoji-picker';
+import React, { useState } from "react";
+import EmojiPicker from "./emoji-picker";
 
-import './emoji-paint.css';
+import "./emoji-paint.css";
 
 const DEFAULT_HEIGHT = 8;
 const DEFAULT_WIDTH = 10;
 
-export default class App extends Component {
+const EmojiPaint = () => {
+  const [width, setWidth] = useState(DEFAULT_WIDTH);
+  const [height, setHeight] = useState(DEFAULT_HEIGHT);
+  const [activeEmoji, setActiveEmoji] = useState("😀");
 
-	constructor(props) {
-		super(props);
+  return (
+    <div className="emoji-paint">
+      <div className="emoji-paint__toolbar">
+        <div className="emoji-paint__controls">
+          <EmojiPicker
+            value={activeEmoji}
+            onSelect={emoji => setActiveEmoji(emoji)}
+          />
+          <button className="emoji-paint__control">
+            <img
+              className="emoji-paint__control_icon"
+              src="brush.png"
+              alt="brush"
+            />
+          </button>
+          <button className="emoji-paint__control">
+            <img
+              className="emoji-paint__control_icon"
+              src="eraser.png"
+              alt="eraser"
+            />
+          </button>
+        </div>
+        <div>
+          <label className="emoji-paint__dimension">
+            Width
+            <input
+              type="number"
+              className="emoji-paint__dimension_input"
+              onChange={e => setWidth(Number(e.target.value))}
+              defaultValue={width}
+            />
+          </label>
+          <label className="emoji-paint__dimension">
+            Height
+            <input
+              type="number"
+              className="emoji-paint__dimension_input"
+              onChange={e => setHeight(Number(e.target.value))}
+              defaultValue={height}
+            />
+          </label>
+        </div>
+      </div>
+      <EmojiGrid height={height} width={width} />
+    </div>
+  );
+};
 
-		this.state = {
-			activeEmoji: props.emoji[0],
-			height: DEFAULT_HEIGHT,
-			isEmojiPickerShowing: false,
-			width: DEFAULT_WIDTH,
-		};
-	}
+const EmojiGrid = ({ height, width }) => (
+  <div>
+    {[...Array(height)]
+      .map((_, row) => ({ children }) => (
+        <div key={row} className="row flex">
+          {children}
+        </div>
+      ))
+      .map((Comp, i) => (
+        <Comp key={i}>
+          {[...Array(width)].map((_, col) => (
+            <div key={col} className="pa1">
+              CELL
+            </div>
+          ))}
+        </Comp>
+      ))}
+  </div>
+);
 
-	/**
-	 * Toggle the visibility of the emoji picker
-	 */
-	toggleEmojiPicker() {
-		this.setState(({ isEmojiPickerShowing }) => ({
-			isEmojiPickerShowing: !isEmojiPickerShowing,
-		}));
-	}
-
-	/**
-	 * Set the currently active emoji symbol
-	 * @param {String} emoji - the next active emoji
-	 */
-	updateActiveEmoji(emoji) {
-		this.setState(() => ({
-			activeEmoji: emoji,
-			isEmojiPickerShowing: false,
-		}));
-	}
-
-	/**
-	 * Update the canvas dimensions based on new height and/or width
-	 * @param {Object} dimensions - new dimensions
-	 * @param {Number} dimensions.height - next height value
-	 * @param {Number} dimensions.width - next width value
-	 */
-	onSizeChange({ height, width }) {
-		this.setState(() => ({ height, width }));
-	}
-
-	/**
-	 * Render the EmojiPaint component
-	 * @return {ReactElement} - EmojiPaint element
-	 */
-	render() {
-		return (
-			<div className="emoji-paint">
-				<div className="emoji-paint__toolbar">
-					<div className="emoji-paint__controls">
-						<button className="emoji-paint__control" onClick={this.toggleEmojiPicker}>
-							{this.state.activeEmoji}
-						</button>
-						<button className="emoji-paint__control">
-							<img className="emoji-paint__control_icon" src="brush.png" alt="brush" />
-						</button>
-						<button className="emoji-paint__control">
-							<img className="emoji-paint__control_icon" src="eraser.png" alt="eraser" />
-						</button>
-						{this.state.isEmojiPickerShowing && (
-							<EmojiPicker
-								emoji={this.props.emoji}
-								onSelect={(symbol) => this.updateActiveEmoji(symbol)}
-								onClose={() => this.toggleEmojiPicker()}
-							/>
-						)}
-					</div>
-					<div>
-						<label className="emoji-paint__dimension">
-							Width
-							<input
-								type="text"
-								className="emoji-paint__dimension_input"
-								onChange={(e) => this.onSizeChange({ width: e.target.value })}
-								defaultValue={this.state.width}
-							/>
-						</label>
-						<label className="emoji-paint__dimension">
-							Height
-							<input
-								type="text"
-								className="emoji-paint__dimension_input"
-								onChange={(e) => this.onSizeChange({ height: e.target.value })}
-								defaultValue={this.state.height}
-							/>
-						</label>
-					</div>
-				</div>
-			</div>
-		);
-	}
-
-}
+export default EmojiPaint;
