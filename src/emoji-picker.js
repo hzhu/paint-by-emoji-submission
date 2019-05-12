@@ -68,6 +68,7 @@ export default ({ value, onSelect }) => {
                 style={listboxStyle}
                 activeIndex={activeIndex}
                 highlightedIndex={activeIndex}
+                ariaLabelledBy="emoji_btn_label"
                 updateValue={({ activeId, activeIndex, selectedItem }) => {
                   onSelect(selectedItem);
                   setActiveId(activeId);
@@ -80,7 +81,7 @@ export default ({ value, onSelect }) => {
                       <Option
                         key={n}
                         className="pointer"
-                        style={{ padding: "5px 5px 0px 5px" }}
+                        style={{ padding: "5px 5px 2px 5px" }}
                         onMouseEnter={(index, id) => {
                           setActiveId(id);
                           setActiveIndex(index);
