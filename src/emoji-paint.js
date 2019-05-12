@@ -3,8 +3,8 @@ import EmojiPicker from "./emoji-picker";
 
 import "./emoji-paint.css";
 
-const DEFAULT_HEIGHT = 8;
-const DEFAULT_WIDTH = 10;
+export const DEFAULT_HEIGHT = 8;
+export const DEFAULT_WIDTH = 10;
 
 const EmojiPaint = () => {
   const [width, setWidth] = useState(DEFAULT_WIDTH);
@@ -61,10 +61,10 @@ const EmojiPaint = () => {
 };
 
 const EmojiGrid = ({ height, width }) => (
-  <div>
+  <div data-testid="grid">
     {[...Array(height)]
       .map((_, row) => ({ children }) => (
-        <div key={row} className="row flex">
+        <div key={row} data-testid={`row-${row}`} className="row flex">
           {children}
         </div>
       ))
