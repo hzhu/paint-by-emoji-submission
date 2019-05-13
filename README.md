@@ -45,22 +45,22 @@ We would like to provide users with a way to easily lay out emoji in a grid and 
 
 **Drawing**
 * [x] :star: **P1**: As a user, I should be able to select an emoji from a small subset of Emoji 5.
-* [ ] :star: **P1**: As a user, I should be able to draw that emoji onto the canvas after selecting the Brush tool.
-* [ ] **P2**: As a user, while using the Brush tool I should be able to click and hold to enter emoji in all the grid squares that my cursor enters.
-* [ ] :star: **P1**: As a user, I should be able to erase a painted emoji by clicking on it after selecting the Eraser tool.
-* [ ] **P2**: As a user, while using the Eraser tool I should be able to click and hold to remove emoji in all the grid squares that my cursor enters.
-* [ ] **P2**: As a user, I should be able to select a new emoji and overwrite an emoji already in a grid square.
+* [x] :star: **P1**: As a user, I should be able to draw that emoji onto the canvas after selecting the Brush tool.
+* [x] **P2**: As a user, while using the Brush tool I should be able to click and hold to enter emoji in all the grid squares that my cursor enters.
+* [x] :star: **P1**: As a user, I should be able to erase a painted emoji by clicking on it after selecting the Eraser tool.
+* [x] **P2**: As a user, while using the Eraser tool I should be able to click and hold to remove emoji in all the grid squares that my cursor enters.
+* [x] **P2**: As a user, I should be able to select a new emoji and overwrite an emoji already in a grid square.
 
 **Grid**
-* [ ] :star: **P1**: As a user, I should be able to adjust the size of the grid by entering numbers into the Height and Width fields.
+* [x] :star: **P1**: As a user, I should be able to adjust the size of the grid by entering numbers into the Height and Width fields.
 * [ ] **P2**: As a user, I should be notified if I enter invalid data into the Height and Width fields (non-numerical data or numbers out of bounds.
-* [ ] **P2**: As a user, I should be able to convert the emoji into shortcodes and have them be stored in my clipboard for later pasting (assume the existance of a `:blank:` emoji for the empty cells).
-* [ ] **P2**: As a user, I should be able to clear the canvas by clicking on the Clear button.
+* [x] **P2**: As a user, I should be able to convert the emoji into shortcodes and have them be stored in my clipboard for later pasting (assume the existance of a `:blank:` emoji for the empty cells).
+* [x] **P2**: As a user, I should be able to clear the canvas by clicking on the Clear button.
 
 **User experience**
-* [ ] **P2**: As a user, I shouldn't have to wait more than 1500ms for the page to load.
-* [ ] **P2**: As a user, the tool should feel responsive to my actions (100ms or less from user action to result on page).
-* [ ] **P2**: As a user, I should be able to use all of the features of the emoji layout tool in the latest versions of Chrome and Firefox without experiencing bugs.
+* [x] **P2**: As a user, I shouldn't have to wait more than 1500ms for the page to load.
+* [x] **P2**: As a user, the tool should feel responsive to my actions (100ms or less from user action to result on page).
+* [x] **P2**: As a user, I should be able to use all of the features of the emoji layout tool in the latest versions of Chrome and Firefox without experiencing bugs.
 
 ## Designs
 
