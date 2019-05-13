@@ -96,6 +96,7 @@ const EmojiPaint = () => {
   return (
     <div className="emoji-paint tc">
       <EmojiToolbar
+        mode={mode}
         setMode={setMode}
         activeEmoji={activeEmoji}
         setActiveEmoji={setActiveEmoji}
@@ -145,6 +146,7 @@ const EmojiPaint = () => {
 };
 
 const EmojiToolbar = ({
+  mode,
   setMode,
   activeEmoji,
   setActiveEmoji,
@@ -155,14 +157,13 @@ const EmojiToolbar = ({
     <div className="emoji-paint__controls">
       <EmojiPicker
         value={activeEmoji}
-        onSelect={emoji => {
-          setMode(MODE.brush);
-          setActiveEmoji(emoji);
-        }}
+        onSelect={emoji => setActiveEmoji(emoji)}
       />
       <button
         onClick={() => setMode(MODE.brush)}
-        className="emoji-paint__control"
+        className={`emoji-paint__control ${
+          mode === MODE.brush ? "b--green" : ""
+        }`}
       >
         <img
           className="emoji-paint__control_icon"
@@ -172,7 +173,9 @@ const EmojiToolbar = ({
       </button>
       <button
         onClick={() => setMode(MODE.erase)}
-        className="emoji-paint__control"
+        className={`emoji-paint__control ${
+          mode === MODE.erase ? "b--green" : ""
+        }`}
       >
         <img
           className="emoji-paint__control_icon"
@@ -207,7 +210,7 @@ const EmojiToolbar = ({
 const EmojiGrid = ({ grid, mode, onGridUpdate, isPainting, setIsPainting }) => (
   <div
     data-testid="grid"
-    className={`ma3 br3 dib ${mode === MODE.brush ? "pointer" : ""}`}
+    className={`ma3 br3 dib ${mode ? "pointer" : ""}`}
     style={{
       border: "1px solid #a0a0a2"
     }}
@@ -252,21 +255,13 @@ const EmojiGrid = ({ grid, mode, onGridUpdate, isPainting, setIsPainting }) => (
 );
 
 const ModePanel = ({ mode }) => (
-  <div
-    className="pb3"
-    style={{
-      background: "#F9F9F9"
-    }}
-    aria-live="polite"
-  >
+  <div className="clip" aria-live="polite">
     {mode ? (
       <span>
         You are in{" "}
         <strong>{mode === MODE.brush ? "painting" : "erasing"}</strong> mode.
       </span>
-    ) : (
-      <span>&nbsp;</span>
-    )}
+    ) : null}
   </div>
 );
 
