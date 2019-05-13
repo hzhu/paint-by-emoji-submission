@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import EmojiPicker from "./emoji-picker";
+import { EMOJIS } from "./constants";
 
 import "./emoji-paint.css";
 
@@ -19,6 +20,29 @@ const EmojiPaint = () => {
     const newGrid = JSON.parse(JSON.stringify(grid));
     newGrid[m][n] = activeEmoji;
     setGrid(newGrid);
+  };
+
+  const clearGrid = () => {
+    const newGrid = JSON.parse(JSON.stringify(grid));
+    const emptyGrid = newGrid.map(row => row.map(cell => ""));
+    setGrid(emptyGrid);
+  };
+
+  const copyToClipboard = () => {
+    let str = ``;
+    grid.forEach(row => {
+      row.forEach(cell => (str += EMOJIS[cell].shortcode));
+      str += "\n";
+    });
+    navigator.clipboard
+      .writeText(str.slice(0, -1))
+      .then(() => console.log("Copied to clipboard"))
+      .catch(err =>
+        window.alert(
+          "Could not copy text please try a different web browser: ",
+          err
+        )
+      );
   };
 
   const onHeightChange = e => {
@@ -76,6 +100,7 @@ const EmojiPaint = () => {
       />
       <div className="flex justify-end ma3 mt0">
         <button
+          onClick={clearGrid}
           className="ph3 br2 fw5 pointer"
           style={{
             border: "1px solid #bfc0c0"
@@ -84,6 +109,7 @@ const EmojiPaint = () => {
           Clear
         </button>
         <button
+          onClick={copyToClipboard}
           className="f6 fw6 ml2 white ph3 pv3 bn br2 pointer"
           style={{ backgroundColor: "rgb(52, 175, 127)" }}
         >
@@ -153,15 +179,18 @@ const EmojiGrid = ({ grid, onGridUpdate, isPainting, setIsPainting }) => (
     }}
     onMouseDown={() => setIsPainting(true)}
     onMouseUp={() => setIsPainting(false)}
+    onContextMenu={() => setIsPainting(false)}
   >
     {grid.map((row, m) => (
       <div key={m} data-testid={`row-${m}`} className="flex">
         {row.map((element, n) => {
           return (
-            <div
+            <span
               key={n}
-              data-testid={`cell-${m}-${n}`}
+              role="img"
               className="pa1"
+              aria-label={EMOJIS[element].name}
+              data-testid={`cell-${m}-${n}`}
               style={{
                 fontSize: "37px",
                 width: "45px",
@@ -180,7 +209,7 @@ const EmojiGrid = ({ grid, onGridUpdate, isPainting, setIsPainting }) => (
               }}
             >
               {element}
-            </div>
+            </span>
           );
         })}
       </div>

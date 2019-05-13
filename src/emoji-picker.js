@@ -6,7 +6,7 @@ import {
   DropdownButton,
   CollapsibleDropdown
 } from "listbox";
-import { EMOJIS } from "./constants";
+import { EMOJI_PICKER, EMOJIS } from "./constants";
 import "./emoji-picker.css";
 
 const visuallyHiddenCSS = {
@@ -75,7 +75,7 @@ export default ({ value, onSelect }) => {
                   setActiveIndex(activeIndex);
                 }}
               >
-                {EMOJIS.map((row, m) => (
+                {EMOJI_PICKER.map((row, m) => (
                   <OptionsList key={m} style={{ display: "flex" }}>
                     {row.map((emoji, n) => (
                       <Option
@@ -87,8 +87,8 @@ export default ({ value, onSelect }) => {
                           setActiveIndex(index);
                         }}
                       >
-                        <span role="img" aria-label={emoji.name}>
-                          {emoji.emoji}
+                        <span role="img" aria-label={EMOJIS[emoji].name}>
+                          {emoji}
                         </span>
                       </Option>
                     ))}

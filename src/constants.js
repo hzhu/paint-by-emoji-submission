@@ -1,68 +1,21 @@
-export const EMOJIS = [
-  [
-    {
-      name: "grinning face",
-      emoji: "😀",
-      alias: ":grinning:"
-    },
-    {
-      name: "grinning Face With Smiling Eyes",
-      emoji: "😁",
-      alias: ":smile:"
-    },
-    {
-      name: "smiling face with sunglasses",
-      emoji: "😎",
-      alias: ":sunglasses:"
-    },
-    {
-      name: "face throwing a kiss",
-      emoji: "😘",
-      alias: ":kissing_heart:"
-    }
-  ],
-  [
-    {
-      name: "arrow pointing up",
-      emoji: "⬆️",
-      alias: ":arrow_up:"
-    },
-    {
-      name: "arrow pointing right",
-      emoji: "➡️",
-      alias: ":arrow_right:"
-    },
-    {
-      name: "arrow pointing down",
-      emoji: "⬇️",
-      alias: ":arrow_down:"
-    },
-    {
-      name: "arrow pointing left",
-      emoji: "⬅️",
-      alias: ":arrow_left:"
-    }
-  ],
-  [
-    {
-      name: "white circle",
-      emoji: "⚪",
-      alias: ":white_circle:"
-    },
-    {
-      name: "black circle",
-      emoji: "⚫",
-      alias: ":black_circle:"
-    },
-    {
-      name: "red circle",
-      emoji: "🔴",
-      alias: ":red_circle:"
-    },
-    {
-      name: "large blue circle",
-      emoji: "🔵",
-      alias: ":large_blue_circle:"
-    }
-  ]
+export const EMOJIS = {
+  "😀": { name: "grinning face", shortcode: ":grinning:" },
+  "😁": { name: "grinning face with smiling eyes", shortcode: ":smile:" },
+  "😎": { name: "smiling face with sunglasses", shortcode: ":sunglasses:" },
+  "😘": { name: "face throwing a kiss", shortcode: ":kissing_heart:" },
+  "⬆️": { name: "arrow pointing up", shortcode: ":arrow_up:" },
+  "➡️": { name: "arrow pointing right", shortcode: ":arrow_right:" },
+  "⬇️": { name: "arrow pointing down", shortcode: ":arrow_down:" },
+  "⬅️": { name: "arrow pointing left", shortcode: ":arrow_left:" },
+  "⚪": { name: "white circle", shortcode: ":white_circle:" },
+  "⚫": { name: "black circle", shortcode: ":black_circle:" },
+  "🔴": { name: "red circle", shortcode: ":red_circle:" },
+  "🔵": { name: "large blue circle", shortcode: ":large_blue_circle:" },
+  "": { name: "blank emoji", shortcode: ":blank:" }
+};
+
+export const EMOJI_PICKER = [
+  ["😀", "😁", "😎", "😘"],
+  ["⬆️", "➡️", "⬇️", "⬅️"],
+  ["⚪", "⚫", "🔴", "🔵"]
 ];
