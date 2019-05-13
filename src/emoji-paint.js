@@ -110,7 +110,7 @@ const EmojiPaint = () => {
         setIsPainting={setIsPainting}
         onGridUpdate={onGridUpdate}
       />
-      <div className="flex justify-end ma3 mt0">
+      <div className="flex justify-end mh3">
         <button
           onClick={clearGrid}
           className="ph3 br2 fw5 pointer"
@@ -128,6 +128,18 @@ const EmojiPaint = () => {
           Copy to clipboard
         </button>
       </div>
+      <div className="pa3">
+        <span>
+          Learn how to add a <em>:blank:</em> emoji to your Slack workspace{" "}
+          <a
+            className="link bg-animate hover-bg-lightest-blue"
+            href="https://get.slack.help/hc/en-us/articles/206870177-Add-custom-emoji"
+          >
+            here
+          </a>
+          !
+        </span>
+    </div>
     </div>
   );
 };
