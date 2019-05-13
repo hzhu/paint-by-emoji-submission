@@ -87,7 +87,10 @@ export default ({ value, onSelect }) => {
                           setActiveIndex(index);
                         }}
                       >
-                        <span role="img" aria-label={EMOJIS[emoji].name}>
+                        <span
+                          role="img"
+                          aria-label={`${EMOJIS[emoji].name} emoji`}
+                        >
                           {emoji}
                         </span>
                       </Option>
