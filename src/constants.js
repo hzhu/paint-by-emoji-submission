@@ -3,6 +3,29 @@ export const EMOJIS = {
   "😁": { name: "grinning face with smiling eyes", shortcode: ":smile:" },
   "😎": { name: "smiling face with sunglasses", shortcode: ":sunglasses:" },
   "😘": { name: "face throwing a kiss", shortcode: ":kissing_heart:" },
+  "😂": { name: "face with tears of joy", shortcode: ":joy:" },
+  "👍": { name: "thumbs up", shortcode: ":thumbsup:" },
+  "👎": { name: "thumbs down", shortcode: ":thumbsdown:" },
+  "🚀": { name: "rocket", shortcode: ":rocket:" },
+  "🎉": { name: "party popper", shortcode: ":tada:" },
+  "🔥": { name: "fire", shortcode: ":fire:" },
+  "💩": { name: "pile of poo", shorthand: ":poop:" },
+  "♿": { name: "wheelchair", shorthand: ":wheelchair:" },
+  "🙏": { name: "person with folded hands", shortcode: "" },
+  "💯": { name: "hundred points symbol", shortcode: "" },
+  "👏": { name: "clapping hands sign", shortcode: "" },
+  "✈️": { name: "airplane", shortcode: ":airplane:" },
+  "🚆": { name: "train", shortcode: ":train:" },
+  "🚕": { name: "taxi", shortcode: ":taxi:" },
+  "🚢": { name: "ship", shortcode: ":ship:" },
+  "🚌": { name: "bus", shortcode: ":bus:" },
+  "⭐": { name: "white medium star", shortcode: ":star:" },
+  "❓": { name: "question mark", shortcode: ":question:" },
+  "💻": { name: "computer", shortcode: ":computer:" },
+  "☎️": { name: "phone", shortcode: ":phone:" },
+  "🔍": { name: "magnifying glass", shortcode: ":mag:" },
+  "📷": { name: "camera", shortcode: ":camera:" },
+  "📝": { name: "memo", shortcode: ":memo:" },
   "⬆️": { name: "arrow pointing up", shortcode: ":arrow_up:" },
   "➡️": { name: "arrow pointing right", shortcode: ":arrow_right:" },
   "⬇️": { name: "arrow pointing down", shortcode: ":arrow_down:" },
@@ -13,9 +36,12 @@ export const EMOJIS = {
   "🔵": { name: "large blue circle", shortcode: ":large_blue_circle:" },
   "": { name: "blank emoji", shortcode: ":blank:" }
 };
-
 export const EMOJI_PICKER = [
-  ["😀", "😁", "😎", "😘"],
-  ["⬆️", "➡️", "⬇️", "⬅️"],
-  ["⚪", "⚫", "🔴", "🔵"]
+  ["😀", "😁", "😎", "😘", "😂"],
+  ["👎", "👍", "🙏", "💯", "👏"],
+  ["🚀", "🎉", "🔥", "💩", "⭐"],
+  ["✈️", "🚆", "🚕", "🚢", "🚌"],
+  ["💻", "☎️", "📷", "📝", "🔍"],
+  ["⬆️", "➡️", "⬇️", "⬅️", "♿"],
+  ["⚪", "⚫", "🔴", "🔵", "❓"]
 ];
