@@ -74,6 +74,22 @@ const EmojiPaint = () => {
         setIsPainting={setIsPainting}
         onGridUpdate={onGridUpdate}
       />
+      <div className="flex justify-end ma3 mt0">
+        <button
+          className="ph3 br2 fw5 pointer"
+          style={{
+            border: "1px solid #bfc0c0"
+          }}
+        >
+          Clear
+        </button>
+        <button
+          className="f6 fw6 ml2 white ph3 pv3 bn br2 pointer"
+          style={{ backgroundColor: "rgb(52, 175, 127)" }}
+        >
+          Copy to clipboard
+        </button>
+      </div>
     </div>
   );
 };
@@ -131,7 +147,7 @@ const EmojiToolbar = ({
 const EmojiGrid = ({ grid, onGridUpdate, isPainting, setIsPainting }) => (
   <div
     data-testid="grid"
-    className="ma4 br3 dib pointer"
+    className="ma3 br3 dib pointer"
     style={{
       border: "1px solid #a0a0a2"
     }}

@@ -1,11 +1,14 @@
 .app {
-	align-items: center;
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-	justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, "avenir next", avenir,
+    "helvetica neue", helvetica, ubuntu, roboto, noto, "segoe ui", arial,
+    sans-serif;
 
-	.emoji-paint {
-		box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-	}
+  .emoji-paint {
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+  }
 }
