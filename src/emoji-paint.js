@@ -214,8 +214,9 @@ const EmojiGrid = ({ grid, mode, onGridUpdate, isPainting, setIsPainting }) => (
     style={{
       border: "1px solid #a0a0a2"
     }}
-    onMouseDown={() => setIsPainting(true)}
     onMouseUp={() => setIsPainting(false)}
+    onMouseDown={() => setIsPainting(true)}
+    onMouseLeave={() => setIsPainting(false)}
     onContextMenu={() => setIsPainting(false)}
   >
     {grid.map((row, m) => (
