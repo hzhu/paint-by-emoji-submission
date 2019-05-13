@@ -6,10 +6,15 @@ import "./emoji-paint.css";
 
 export const DEFAULT_HEIGHT = 8;
 export const DEFAULT_WIDTH = 10;
+export const MODE = {
+  brush: "brush",
+  erase: "erase"
+};
 
 const EmojiPaint = () => {
-  const [activeEmoji, setActiveEmoji] = useState("😀");
+  const [mode, setMode] = useState();
   const [isPainting, setIsPainting] = useState(false);
+  const [activeEmoji, setActiveEmoji] = useState("😀");
   const [grid, setGrid] = useState(
     [...Array(DEFAULT_HEIGHT)].map(row =>
       [...Array(DEFAULT_WIDTH)].map(() => "")
@@ -18,7 +23,11 @@ const EmojiPaint = () => {
 
   const onGridUpdate = (m, n) => {
     const newGrid = JSON.parse(JSON.stringify(grid));
-    newGrid[m][n] = activeEmoji;
+    if (mode === MODE.brush) {
+      newGrid[m][n] = activeEmoji;
+    } else {
+      newGrid[m][n] = "";
+    }
     setGrid(newGrid);
   };
 
@@ -87,13 +96,16 @@ const EmojiPaint = () => {
   return (
     <div className="emoji-paint tc">
       <EmojiToolbar
+        setMode={setMode}
         activeEmoji={activeEmoji}
         setActiveEmoji={setActiveEmoji}
         onWidthChange={onWidthChange}
         onHeightChange={onHeightChange}
       />
+      <ModePanel mode={mode} />
       <EmojiGrid
         grid={grid}
+        mode={mode}
         isPainting={isPainting}
         setIsPainting={setIsPainting}
         onGridUpdate={onGridUpdate}
@@ -121,6 +133,7 @@ const EmojiPaint = () => {
 };
 
 const EmojiToolbar = ({
+  setMode,
   activeEmoji,
   setActiveEmoji,
   onWidthChange,
@@ -130,16 +143,25 @@ const EmojiToolbar = ({
     <div className="emoji-paint__controls">
       <EmojiPicker
         value={activeEmoji}
-        onSelect={emoji => setActiveEmoji(emoji)}
+        onSelect={emoji => {
+          setMode(MODE.brush);
+          setActiveEmoji(emoji);
+        }}
       />
-      <button className="emoji-paint__control">
+      <button
+        onClick={() => setMode(MODE.brush)}
+        className="emoji-paint__control"
+      >
         <img
           className="emoji-paint__control_icon"
           src="brush.png"
           alt="brush"
         />
       </button>
-      <button className="emoji-paint__control">
+      <button
+        onClick={() => setMode(MODE.erase)}
+        className="emoji-paint__control"
+      >
         <img
           className="emoji-paint__control_icon"
           src="eraser.png"
@@ -170,10 +192,10 @@ const EmojiToolbar = ({
   </div>
 );
 
-const EmojiGrid = ({ grid, onGridUpdate, isPainting, setIsPainting }) => (
+const EmojiGrid = ({ grid, mode, onGridUpdate, isPainting, setIsPainting }) => (
   <div
     data-testid="grid"
-    className="ma3 br3 dib pointer"
+    className={`ma3 br3 dib ${mode === MODE.brush ? "pointer" : ""}`}
     style={{
       border: "1px solid #a0a0a2"
     }}
@@ -214,6 +236,25 @@ const EmojiGrid = ({ grid, onGridUpdate, isPainting, setIsPainting }) => (
         })}
       </div>
     ))}
+  </div>
+);
+
+const ModePanel = ({ mode }) => (
+  <div
+    className="pb3"
+    style={{
+      background: "#F9F9F9"
+    }}
+    aria-live="polite"
+  >
+    {mode ? (
+      <span>
+        You are in{" "}
+        <strong>{mode === MODE.brush ? "painting" : "erasing"}</strong> mode.
+      </span>
+    ) : (
+      <span>&nbsp;</span>
+    )}
   </div>
 );
 
