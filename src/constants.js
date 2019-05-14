@@ -1,3 +1,27 @@
+export const MIN_WIDTH = 1;
+
+export const MIN_HEIGHT = 1;
+
+export const MAX_WIDTH = 45;
+
+export const MAX_HEIGHT = 25;
+
+export const DEFAULT_HEIGHT = 8;
+
+export const DEFAULT_WIDTH = 10;
+
+export const MODE = { brush: "brush", erase: "erase" };
+
+export const EMOJI_PICKER = [
+  ["😀", "😁", "😎", "😘", "😂"],
+  ["👎", "👍", "🙏", "💯", "👏"],
+  ["🚀", "🎉", "🔥", "💩", "⭐"],
+  ["✈️", "🚆", "🚕", "🚢", "🚌"],
+  ["💻", "☎️", "📷", "📝", "🔍"],
+  ["⬆️", "➡️", "⬇️", "⬅️", "♿"],
+  ["⚪", "⚫", "🔴", "🔵", "❓"]
+];
+
 export const EMOJIS = {
   "😀": { name: "grinning face", shortcode: ":grinning:" },
   "😁": { name: "grinning face with smiling eyes", shortcode: ":smile:" },
@@ -34,14 +58,6 @@ export const EMOJIS = {
   "⚫": { name: "black circle", shortcode: ":black_circle:" },
   "🔴": { name: "red circle", shortcode: ":red_circle:" },
   "🔵": { name: "large blue circle", shortcode: ":large_blue_circle:" },
+  "⚠️": { name: "warning", shortcode: ":warning:" },
   "": { name: "blank emoji", shortcode: ":blank:" }
 };
-export const EMOJI_PICKER = [
-  ["😀", "😁", "😎", "😘", "😂"],
-  ["👎", "👍", "🙏", "💯", "👏"],
-  ["🚀", "🎉", "🔥", "💩", "⭐"],
-  ["✈️", "🚆", "🚕", "🚢", "🚌"],
-  ["💻", "☎️", "📷", "📝", "🔍"],
-  ["⬆️", "➡️", "⬇️", "⬅️", "♿"],
-  ["⚪", "⚫", "🔴", "🔵", "❓"]
-];

@@ -1,22 +1,26 @@
 import React, { useState } from "react";
 import EmojiPicker from "./emoji-picker";
-import { EMOJIS } from "./constants";
+import {
+  MODE,
+  EMOJIS,
+  MIN_WIDTH,
+  MIN_HEIGHT,
+  MAX_WIDTH,
+  MAX_HEIGHT,
+  DEFAULT_WIDTH,
+  DEFAULT_HEIGHT
+} from "./constants";
 
 import "./emoji-paint.css";
 
-export const DEFAULT_HEIGHT = 8;
-export const DEFAULT_WIDTH = 10;
-export const MODE = {
-  brush: "brush",
-  erase: "erase"
-};
-
 const EmojiPaint = () => {
   const [mode, setMode] = useState();
+  const [width, setWidth] = useState(DEFAULT_WIDTH);
+  const [height, setHeight] = useState(DEFAULT_HEIGHT);
   const [isPainting, setIsPainting] = useState(false);
   const [activeEmoji, setActiveEmoji] = useState("😀");
   const [grid, setGrid] = useState(
-    [...Array(DEFAULT_HEIGHT)].map(row =>
+    [...Array(DEFAULT_HEIGHT)].map(() =>
       [...Array(DEFAULT_WIDTH)].map(() => "")
     )
   );
@@ -57,16 +61,18 @@ const EmojiPaint = () => {
   const onHeightChange = e => {
     if (!e.target.value) return;
     const newGrid = JSON.parse(JSON.stringify(grid));
-    const currRows = grid.length;
-    const nextRows = Number(e.target.value);
-    if (nextRows > currRows) {
-      const rowsToAdd = nextRows - currRows;
+    const currHeight = grid.length;
+    const nextHeight = Number(e.target.value);
+    setHeight(nextHeight);
+    if (nextHeight > MAX_HEIGHT || nextHeight < MIN_HEIGHT) return;
+    if (nextHeight > currHeight) {
+      const rowsToAdd = nextHeight - currHeight;
       for (let i = 0; i < rowsToAdd; i++) {
         const width = newGrid[0].length;
         newGrid.push([...Array(width)].map(() => ""));
       }
     } else {
-      const rowsToRemove = currRows - nextRows;
+      const rowsToRemove = currHeight - nextHeight;
       for (let i = 0; i < rowsToRemove; i++) {
         newGrid.pop();
       }
@@ -77,15 +83,17 @@ const EmojiPaint = () => {
   const onWidthChange = e => {
     if (!e.target.value) return;
     const newGrid = JSON.parse(JSON.stringify(grid));
-    const currCols = grid[0].length;
-    const nextCols = Number(e.target.value);
-    if (nextCols > currCols) {
-      const colsToAdd = nextCols - currCols;
+    const currWidth = grid[0].length;
+    const nextWidth = Number(e.target.value);
+    setWidth(nextWidth);
+    if (nextWidth > MAX_WIDTH || nextWidth < MIN_WIDTH) return;
+    if (nextWidth > currWidth) {
+      const colsToAdd = nextWidth - currWidth;
       for (let i = 0; i < colsToAdd; i++) {
         newGrid.forEach(row => row.push(""));
       }
     } else {
-      const colsToRemove = currCols - nextCols;
+      const colsToRemove = currWidth - nextWidth;
       for (let i = 0; i < colsToRemove; i++) {
         newGrid.forEach(row => row.pop());
       }
@@ -97,6 +105,8 @@ const EmojiPaint = () => {
     <div className="emoji-paint tc">
       <EmojiToolbar
         mode={mode}
+        width={width}
+        height={height}
         setMode={setMode}
         activeEmoji={activeEmoji}
         setActiveEmoji={setActiveEmoji}
@@ -147,6 +157,8 @@ const EmojiPaint = () => {
 
 const EmojiToolbar = ({
   mode,
+  width,
+  height,
   setMode,
   activeEmoji,
   setActiveEmoji,
@@ -188,6 +200,8 @@ const EmojiToolbar = ({
       <label className="emoji-paint__dimension">
         Width
         <input
+          min={MIN_WIDTH}
+          max={MAX_WIDTH}
           type="number"
           className="emoji-paint__dimension_input"
           onChange={onWidthChange}
@@ -197,14 +211,46 @@ const EmojiToolbar = ({
       <label className="emoji-paint__dimension">
         Height
         <input
+          min={MIN_HEIGHT}
+          max={MAX_HEIGHT}
           type="number"
           className="emoji-paint__dimension_input"
           onChange={onHeightChange}
           defaultValue={DEFAULT_HEIGHT}
         />
       </label>
+      <div className="dark-red pt2 tl">
+        <div aria-live="polite">
+          {width > MAX_WIDTH ? (
+            <span>
+              <EmojiIcon emoji="⚠️" /> The maximum width is {MAX_WIDTH}
+            </span>
+          ) : width < MIN_WIDTH ? (
+            <span>
+              <EmojiIcon emoji="⚠️" /> The minimum width is {MIN_WIDTH}
+            </span>
+          ) : null}
+        </div>
+        <div aria-live="polite">
+          {height > MAX_HEIGHT ? (
+            <span>
+              <EmojiIcon emoji="⚠️" /> The maximum height is {MAX_HEIGHT}
+            </span>
+          ) : height < MIN_HEIGHT ? (
+            <span>
+              <EmojiIcon emoji="⚠️" /> The minimum height is {MIN_HEIGHT}
+            </span>
+          ) : null}
+        </div>
+      </div>
     </div>
   </div>
+);
+
+const EmojiIcon = ({ emoji }) => (
+  <span role="img" aria-label={`${EMOJIS[emoji].name} emoji`}>
+    {emoji}
+  </span>
 );
 
 const EmojiGrid = ({ grid, mode, onGridUpdate, isPainting, setIsPainting }) => (
