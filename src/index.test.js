@@ -33,6 +33,38 @@ test("user should be able to adjust size of the grid (e.g. from 10x8 to 3x3)", (
   }
 });
 
+test("user should see a error message when changing to grid size to be out of bounds", () => {
+  // Given
+  const { getByLabelText, queryAllByTestId } = render(<EmojiPaint />);
+  const widthInput = getByLabelText("Width");
+  const heightInput = getByLabelText("Height");
+  const getBoundsError = () => queryAllByTestId("bounds-error");
+  expect(getBoundsError()).toEqual([]);
+
+  // When
+  fireEvent.change(heightInput, { target: { value: 30 } });
+
+  // Then
+  var [heightError] = getBoundsError();
+  expect(heightError.textContent).toBe("⚠️ The maximum height is 25");
+
+  // And when
+  fireEvent.change(heightInput, { target: { value: -5 } });
+  fireEvent.change(widthInput, { target: { value: 99 } });
+
+  // And then
+  var [widthError, heightError] = getBoundsError();
+  expect(widthError.textContent).toBe("⚠️ The maximum width is 45");
+  expect(heightError.textContent).toBe("⚠️ The minimum height is 1");
+
+  // And when
+  fireEvent.change(widthInput, { target: { value: -5 } });
+
+  // And then
+  var [widthError] = getBoundsError();
+  expect(widthError.textContent).toBe("⚠️ The minimum width is 1");
+});
+
 test("user should be able to paint (and erase) emojis on the grid", () => {
   // Given (a blank grid)
   const { getByTestId, getByAltText } = render(<EmojiPaint />);
