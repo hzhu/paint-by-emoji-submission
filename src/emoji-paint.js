@@ -222,22 +222,22 @@ const EmojiToolbar = ({
       <div className="dark-red pt2 tl">
         <div aria-live="polite">
           {width > MAX_WIDTH ? (
-            <span>
+            <span data-testid="bounds-error">
               <EmojiIcon emoji="⚠️" /> The maximum width is {MAX_WIDTH}
             </span>
           ) : width < MIN_WIDTH ? (
-            <span>
+            <span data-testid="bounds-error">
               <EmojiIcon emoji="⚠️" /> The minimum width is {MIN_WIDTH}
             </span>
           ) : null}
         </div>
         <div aria-live="polite">
           {height > MAX_HEIGHT ? (
-            <span>
+            <span data-testid="bounds-error">
               <EmojiIcon emoji="⚠️" /> The maximum height is {MAX_HEIGHT}
             </span>
           ) : height < MIN_HEIGHT ? (
-            <span>
+            <span data-testid="bounds-error">
               <EmojiIcon emoji="⚠️" /> The minimum height is {MIN_HEIGHT}
             </span>
           ) : null}

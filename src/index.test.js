@@ -72,44 +72,51 @@ test("user should be able to paint (and erase) emojis on the grid", () => {
   const brushButton = getByAltText("brush");
   const eraseButton = getByAltText("eraser");
   const firstRowCoords = [[0, 0], [0, 1], [0, 2]];
+  const getCell = ([m, n]) => getByTestId(`cell-${m}-${n}`);
 
-  firstRowCoords.forEach(coord => {
-    const [m, n] = coord;
-    const cell = getByTestId(`cell-${m}-${n}`);
-    expect(cell.textContent).toBe("");
-  });
+  firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
 
   // When (user paints in the first three cells of the first row)
   fireEvent.click(brushButton);
   fireEvent.mouseDown(grid);
-  firstRowCoords.forEach(coord => {
-    const [m, n] = coord;
-    const cell = getByTestId(`cell-${m}-${n}`);
-    fireEvent.mouseEnter(cell);
-  });
+  firstRowCoords.forEach(coord => fireEvent.mouseEnter(getCell(coord)));
   fireEvent.mouseUp(grid);
 
   // Then (the first row is painted with an emoji)
-  firstRowCoords.forEach(coord => {
-    const [m, n] = coord;
-    const cell = getByTestId(`cell-${m}-${n}`);
-    expect(cell.textContent).toBe("😀");
-  });
+  firstRowCoords.forEach(coord =>
+    expect(getCell(coord).textContent).toBe("😀")
+  );
 
-  // And When (user erases the first three cells of the first row)
+  // And when (user erases the first three cells of the first row)
   fireEvent.click(eraseButton);
   fireEvent.mouseDown(grid);
-  firstRowCoords.forEach(coord => {
-    const [m, n] = coord;
-    const cell = getByTestId(`cell-${m}-${n}`);
-    fireEvent.mouseEnter(cell);
-  });
+  firstRowCoords.forEach(coord => fireEvent.mouseEnter(getCell(coord)));
   fireEvent.mouseUp(grid);
 
-  // And Then (the first row is blank)
-  firstRowCoords.forEach(coord => {
-    const [m, n] = coord;
-    const cell = getByTestId(`cell-${m}-${n}`);
-    expect(cell.textContent).toBe("");
-  });
+  // And then (the first row is blank)
+  firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
+});
+
+test(`user should be able to clear the grid by selecting the "clear" button`, () => {
+  // Given (user paints first three cells of the first row)
+  const { getByText, getByTestId, getByAltText } = render(<EmojiPaint />);
+  const grid = getByTestId("grid");
+  const brushButton = getByAltText("brush");
+  const firstRowCoords = [[0, 0], [0, 1], [0, 2]];
+  const getCell = ([m, n]) => getByTestId(`cell-${m}-${n}`);
+  firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
+  fireEvent.click(brushButton);
+  fireEvent.mouseDown(grid);
+  firstRowCoords.forEach(coord => fireEvent.mouseEnter(getCell(coord)));
+  fireEvent.mouseUp(grid);
+  firstRowCoords.forEach(coord =>
+    expect(getCell(coord).textContent).toBe("😀")
+  );
+
+  // When (user selects the "Clear" button)
+  const clearButton = getByText("Clear");
+  fireEvent.click(clearButton);
+
+  // Then (the painted cells are emptied)
+  firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
 });
