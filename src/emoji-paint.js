@@ -140,7 +140,7 @@ const EmojiPaint = () => {
           </a>
           !
         </span>
-    </div>
+      </div>
     </div>
   );
 };
@@ -162,7 +162,7 @@ const EmojiToolbar = ({
       <button
         onClick={() => setMode(MODE.brush)}
         className={`emoji-paint__control ${
-          mode === MODE.brush ? "b--green" : ""
+          mode === MODE.brush ? "b--green bw1" : ""
         }`}
       >
         <img
@@ -174,7 +174,7 @@ const EmojiToolbar = ({
       <button
         onClick={() => setMode(MODE.erase)}
         className={`emoji-paint__control ${
-          mode === MODE.erase ? "b--green" : ""
+          mode === MODE.erase ? "b--green bw1" : ""
         }`}
       >
         <img
@@ -210,7 +210,7 @@ const EmojiToolbar = ({
 const EmojiGrid = ({ grid, mode, onGridUpdate, isPainting, setIsPainting }) => (
   <div
     data-testid="grid"
-    className={`ma3 br3 dib ${mode ? "pointer" : ""}`}
+    className={`ma3 br3 dib ${mode ? "pointer" : "not-allowed"}`}
     style={{
       border: "1px solid #a0a0a2"
     }}
@@ -256,7 +256,13 @@ const EmojiGrid = ({ grid, mode, onGridUpdate, isPainting, setIsPainting }) => (
 );
 
 const ModePanel = ({ mode }) => (
-  <div className="clip" aria-live="polite">
+  <div
+    className="pb3"
+    style={{
+      background: "#F9F9F9"
+    }}
+    aria-live="polite"
+  >
     {mode ? (
       <span>
         You are in{" "}
