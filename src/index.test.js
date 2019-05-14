@@ -1,6 +1,7 @@
 import React from "react";
 import { render, cleanup, fireEvent, prettyDOM } from "react-testing-library";
-import EmojiPaint, { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "./emoji-paint";
+import EmojiPaint from "./emoji-paint";
+import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "./constants";
 import "jest-dom/extend-expect";
 
 afterEach(cleanup);
@@ -32,10 +33,12 @@ test("user should be able to adjust size of the grid (e.g. from 10x8 to 3x3)", (
   }
 });
 
-test("user should be able to paint emojis on the grid", () => {
-  // Given
-  const { getByTestId } = render(<EmojiPaint />);
+test("user should be able to paint (and erase) emojis on the grid", () => {
+  // Given (a blank grid)
+  const { getByTestId, getByAltText } = render(<EmojiPaint />);
   const grid = getByTestId("grid");
+  const brushButton = getByAltText("brush");
+  const eraseButton = getByAltText("eraser");
   const firstRowCoords = [[0, 0], [0, 1], [0, 2]];
 
   firstRowCoords.forEach(coord => {
@@ -45,6 +48,7 @@ test("user should be able to paint emojis on the grid", () => {
   });
 
   // When (user paints in the first three cells of the first row)
+  fireEvent.click(brushButton);
   fireEvent.mouseDown(grid);
   firstRowCoords.forEach(coord => {
     const [m, n] = coord;
@@ -53,10 +57,27 @@ test("user should be able to paint emojis on the grid", () => {
   });
   fireEvent.mouseUp(grid);
 
-  // Then
+  // Then (the first row is painted with an emoji)
   firstRowCoords.forEach(coord => {
     const [m, n] = coord;
     const cell = getByTestId(`cell-${m}-${n}`);
     expect(cell.textContent).toBe("😀");
+  });
+
+  // And When (user erases the first three cells of the first row)
+  fireEvent.click(eraseButton);
+  fireEvent.mouseDown(grid);
+  firstRowCoords.forEach(coord => {
+    const [m, n] = coord;
+    const cell = getByTestId(`cell-${m}-${n}`);
+    fireEvent.mouseEnter(cell);
+  });
+  fireEvent.mouseUp(grid);
+
+  // And Then (the first row is blank)
+  firstRowCoords.forEach(coord => {
+    const [m, n] = coord;
+    const cell = getByTestId(`cell-${m}-${n}`);
+    expect(cell.textContent).toBe("");
   });
 });
