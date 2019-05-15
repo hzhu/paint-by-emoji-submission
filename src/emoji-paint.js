@@ -25,14 +25,18 @@ const EmojiPaint = () => {
     )
   );
 
-  const onGridUpdate = (m, n) => {
-    const newGrid = JSON.parse(JSON.stringify(grid));
-    if (mode === MODE.brush) {
-      newGrid[m][n] = activeEmoji;
-    } else {
-      newGrid[m][n] = "";
-    }
-    setGrid(newGrid);
+  const onGridUpdate = (m1, n1) => {
+    setGrid(prevGrid =>
+      prevGrid.map((row, m2) =>
+        row.map((cell, n2) => {
+          if (m1 === m2 && n1 === n2) {
+            return mode === MODE.brush ? activeEmoji : "";
+          } else {
+            return cell;
+          }
+        })
+      )
+    );
   };
 
   const clearGrid = () => {
