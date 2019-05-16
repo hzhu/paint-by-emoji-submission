@@ -2,9 +2,9 @@ export const MIN_WIDTH = 1;
 
 export const MIN_HEIGHT = 1;
 
-export const MAX_WIDTH = 45;
+export const MAX_WIDTH = 30;
 
-export const MAX_HEIGHT = 25;
+export const MAX_HEIGHT = 20;
 
 export const DEFAULT_HEIGHT = 8;
 
@@ -33,11 +33,11 @@ export const EMOJIS = {
   "🚀": { name: "rocket", shortcode: ":rocket:" },
   "🎉": { name: "party popper", shortcode: ":tada:" },
   "🔥": { name: "fire", shortcode: ":fire:" },
-  "💩": { name: "pile of poo", shorthand: ":poop:" },
-  "♿": { name: "wheelchair", shorthand: ":wheelchair:" },
-  "🙏": { name: "person with folded hands", shortcode: "" },
-  "💯": { name: "hundred points symbol", shortcode: "" },
-  "👏": { name: "clapping hands sign", shortcode: "" },
+  "💩": { name: "pile of poo", shortcode: ":poop:" },
+  "♿": { name: "wheelchair", shortcode: ":wheelchair:" },
+  "🙏": { name: "person with folded hands", shortcode: ":pray:" },
+  "💯": { name: "hundred points symbol", shortcode: ":100:" },
+  "👏": { name: "clapping hands sign", shortcode: ":clap:" },
   "✈️": { name: "airplane", shortcode: ":airplane:" },
   "🚆": { name: "train", shortcode: ":train:" },
   "🚕": { name: "taxi", shortcode: ":taxi:" },

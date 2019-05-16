@@ -1,7 +1,14 @@
 import React from "react";
 import { render, cleanup, fireEvent, prettyDOM } from "react-testing-library";
 import EmojiPaint from "./emoji-paint";
-import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "./constants";
+import {
+  DEFAULT_WIDTH,
+  DEFAULT_HEIGHT,
+  MAX_WIDTH,
+  MAX_HEIGHT,
+  MIN_WIDTH,
+  MIN_HEIGHT
+} from "./constants";
 import "jest-dom/extend-expect";
 
 afterEach(cleanup);
@@ -46,7 +53,9 @@ test("user should see a error message when changing to grid size to be out of bo
 
   // Then
   var [heightError] = getBoundsError();
-  expect(heightError.textContent).toBe("⚠️ The maximum height is 25");
+  expect(heightError.textContent).toBe(
+    `⚠️ The maximum height is ${MAX_HEIGHT}`
+  );
 
   // And when
   fireEvent.change(heightInput, { target: { value: -5 } });
@@ -54,15 +63,17 @@ test("user should see a error message when changing to grid size to be out of bo
 
   // And then
   var [widthError, heightError] = getBoundsError();
-  expect(widthError.textContent).toBe("⚠️ The maximum width is 45");
-  expect(heightError.textContent).toBe("⚠️ The minimum height is 1");
+  expect(widthError.textContent).toBe(`⚠️ The maximum width is ${MAX_WIDTH}`);
+  expect(heightError.textContent).toBe(
+    `⚠️ The minimum height is ${MIN_HEIGHT}`
+  );
 
   // And when
   fireEvent.change(widthInput, { target: { value: -5 } });
 
   // And then
   var [widthError] = getBoundsError();
-  expect(widthError.textContent).toBe("⚠️ The minimum width is 1");
+  expect(widthError.textContent).toBe(`⚠️ The minimum width is ${MIN_WIDTH}`);
 });
 
 test("user should be able to paint (and erase) emojis on the grid", () => {

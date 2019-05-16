@@ -10,6 +10,7 @@ import {
   DEFAULT_WIDTH,
   DEFAULT_HEIGHT
 } from "./constants";
+import { copyToClipboard } from "./util";
 
 import "./emoji-paint.css";
 
@@ -25,23 +26,6 @@ const EmojiPaint = () => {
     )
   );
   const [emptyGrid, setEmptyGrid] = useState(false);
-
-  const copyToClipboard = () => {
-    let str = ``;
-    grid.forEach(row => {
-      row.forEach(cell => (str += EMOJIS[cell].shortcode));
-      str += "\n";
-    });
-    navigator.clipboard
-      .writeText(str.slice(0, -1))
-      .then(() => console.log("Copied to clipboard"))
-      .catch(err =>
-        window.alert(
-          "Could not copy text please try a different web browser: ",
-          err
-        )
-      );
-  };
 
   const onHeightChange = e => {
     if (!e.target.value) return;
@@ -119,7 +103,7 @@ const EmojiPaint = () => {
           Clear
         </button>
         <button
-          onClick={copyToClipboard}
+          onClick={() => copyToClipboard(grid)}
           className="f6 fw6 ml2 white ph3 pv3 bn br2 pointer"
           style={{ backgroundColor: "rgb(52, 175, 127)" }}
         >
