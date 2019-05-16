@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import EmojiPicker from "./emoji-picker";
 import {
   MODE,
@@ -24,26 +24,7 @@ const EmojiPaint = () => {
       [...Array(DEFAULT_WIDTH)].map(() => "")
     )
   );
-
-  const onGridUpdate = (m1, n1) => {
-    setGrid(prevGrid =>
-      prevGrid.map((row, m2) =>
-        row.map((cell, n2) => {
-          if (m1 === m2 && n1 === n2) {
-            return mode === MODE.brush ? activeEmoji : "";
-          } else {
-            return cell;
-          }
-        })
-      )
-    );
-  };
-
-  const clearGrid = () => {
-    const newGrid = JSON.parse(JSON.stringify(grid));
-    const emptyGrid = newGrid.map(row => row.map(cell => ""));
-    setGrid(emptyGrid);
-  };
+  const [emptyGrid, setEmptyGrid] = useState(false);
 
   const copyToClipboard = () => {
     let str = ``;
@@ -121,13 +102,15 @@ const EmojiPaint = () => {
       <EmojiGrid
         grid={grid}
         mode={mode}
+        emptyGrid={emptyGrid}
+        setEmptyGrid={setEmptyGrid}
+        activeEmoji={activeEmoji}
         isPainting={isPainting}
         setIsPainting={setIsPainting}
-        onGridUpdate={onGridUpdate}
       />
       <div className="flex justify-end mh3">
         <button
-          onClick={clearGrid}
+          onClick={() => setEmptyGrid(true)}
           className="ph3 br2 fw5 pointer"
           style={{
             border: "1px solid #bfc0c0"
@@ -257,53 +240,118 @@ const EmojiIcon = ({ emoji }) => (
   </span>
 );
 
-const EmojiGrid = ({ grid, mode, onGridUpdate, isPainting, setIsPainting }) => (
-  <div
-    data-testid="grid"
-    className={`ma3 br3 dib ${mode ? "pointer" : "not-allowed"}`}
-    style={{
-      border: "1px solid #a0a0a2"
-    }}
-    onMouseUp={() => setIsPainting(false)}
-    onMouseDown={() => setIsPainting(true)}
-    onMouseLeave={() => setIsPainting(false)}
-    onContextMenu={() => setIsPainting(false)}
-  >
-    {grid.map((row, m) => (
-      <div key={m} data-testid={`row-${m}`} className="flex">
-        {row.map((element, n) => {
-          return (
-            <span
+const Comp = React.forwardRef(({ m, n, emptyGrid, setEmptyGrid }, ref) => {
+  const [content, setContent] = useState("");
+
+  useEffect(() => {
+    if (emptyGrid) {
+      setContent("");
+      setEmptyGrid(false);
+    }
+  }, [emptyGrid, setEmptyGrid]);
+
+  const onMouseDown = () => {
+    if (ref.current.mode === MODE.brush) {
+      setContent(ref.current.activeEmoji);
+    } else {
+      setContent("");
+    }
+  };
+
+  const onMouseEnter = () => {
+    if (ref.current.pressed) {
+      if (ref.current.mode === MODE.brush) {
+        setContent(ref.current.activeEmoji);
+      } else {
+        setContent("");
+      }
+    }
+  };
+  return (
+    <span
+      key={n}
+      role="img"
+      className="pa1"
+      aria-label={EMOJIS[content].name}
+      data-testid={`cell-${m}-${n}`}
+      style={{
+        width: "45px",
+        height: "45px",
+        fontSize: "37px",
+        userSelect: "none",
+        borderRight: "1px solid #d5d5d6",
+        borderBottom: "1px solid #d5d5d6"
+      }}
+      onMouseDown={onMouseDown}
+      onMouseEnter={onMouseEnter}
+    >
+      {content}
+    </span>
+  );
+});
+function areEqual(prevProps, nextProps) {
+  // See: https://reactjs.org/docs/react-api.html#reactmemo
+
+  // React.memo() is used to memoize a component by shallow comparing it's props.
+  // Here, it is used as an escape hatch so that each cell only renders based
+  // on its internal component state. State updates to parent components
+  // will not cause a render to the cells if `true` is returned from this `areEqual`
+  // function.
+
+  // This is improves rendering performance if the canvas is a 500x500 grid.
+  // We do not want to re-render 250,000 cells upon parent component state
+  // changes. For example, if the user selects the brush mode, and state for
+  // <EmojiPaint /> updates, it forces the entire subtree to re-render. That
+  // subtree could contain 250,000 grid cell components.
+
+  if (prevProps.emptyGrid !== nextProps.emptyGrid) {
+    // We want to control when cells reset their state when a user clicks the
+    // "Clear" button. Returning `false` here forces the children to render
+    // to it's initial empty state.
+    return false;
+  }
+
+  return true;
+}
+const GridCell = React.memo(Comp, areEqual);
+
+const EmojiGrid = ({ grid, mode, activeEmoji, emptyGrid, setEmptyGrid }) => {
+  const ref = useRef({});
+
+  useEffect(() => {
+    ref.current.mode = mode;
+    ref.current.activeEmoji = activeEmoji;
+  }, [mode, activeEmoji]);
+
+  return (
+    <div
+      data-testid="grid"
+      className={`ma3 br3 dib ${mode ? "pointer" : "not-allowed"}`}
+      style={{
+        border: "1px solid #a0a0a2"
+      }}
+      onMouseUp={() => (ref.current.pressed = false)}
+      onMouseDown={() => (ref.current.pressed = true)}
+      onMouseLeave={() => (ref.current.pressed = false)}
+      onContextMenu={() => (ref.current.pressed = false)}
+    >
+      {grid.map((row, m) => (
+        <div key={m} data-testid={`row-${m}`} className="flex">
+          {row.map((cell, n) => (
+            <GridCell
+              m={m}
+              n={n}
               key={n}
-              role="img"
-              className="pa1"
-              aria-label={EMOJIS[element].name}
-              data-testid={`cell-${m}-${n}`}
-              style={{
-                fontSize: "37px",
-                width: "45px",
-                height: "45px",
-                userSelect: "none",
-                borderRight:
-                  n === row.length - 1 ? "none" : "1px solid #d5d5d6",
-                borderBottom:
-                  m === grid.length - 1 ? "none" : "1px solid #d5d5d6"
-              }}
-              onMouseDown={() => onGridUpdate(m, n)}
-              onMouseEnter={() => {
-                if (isPainting) {
-                  onGridUpdate(m, n);
-                }
-              }}
-            >
-              {element}
-            </span>
-          );
-        })}
-      </div>
-    ))}
-  </div>
-);
+              ref={ref}
+              emptyGrid={emptyGrid}
+              setEmptyGrid={setEmptyGrid}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const ModePanel = ({ mode }) => (
   <div
