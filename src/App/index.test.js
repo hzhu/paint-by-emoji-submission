@@ -1,14 +1,14 @@
 import React from "react";
 import { render, cleanup, fireEvent, prettyDOM } from "react-testing-library";
-import EmojiPaint from "./emoji-paint";
+import App from "./index";
 import {
-  DEFAULT_WIDTH,
-  DEFAULT_HEIGHT,
   MAX_WIDTH,
   MAX_HEIGHT,
   MIN_WIDTH,
-  MIN_HEIGHT
-} from "./constants";
+  MIN_HEIGHT,
+  DEFAULT_WIDTH,
+  DEFAULT_HEIGHT
+} from "../constants";
 import "jest-dom/extend-expect";
 
 afterEach(cleanup);
@@ -17,7 +17,7 @@ test("user should be able to adjust size of the grid (e.g. from 10x8 to 3x3)", (
   // Given
   const NEW_WIDTH = 3;
   const NEW_HEIGHT = 3;
-  const { getByLabelText, getByTestId } = render(<EmojiPaint />);
+  const { getByLabelText, getByTestId } = render(<App />);
   const grid = getByTestId("grid");
   const widthInput = getByLabelText("Width");
   const heightInput = getByLabelText("Height");
@@ -42,7 +42,7 @@ test("user should be able to adjust size of the grid (e.g. from 10x8 to 3x3)", (
 
 test("user should see a error message when changing to grid size to be out of bounds", () => {
   // Given
-  const { getByLabelText, queryAllByTestId } = render(<EmojiPaint />);
+  const { getByLabelText, queryAllByTestId } = render(<App />);
   const widthInput = getByLabelText("Width");
   const heightInput = getByLabelText("Height");
   const getBoundsError = () => queryAllByTestId("bounds-error");
@@ -78,7 +78,7 @@ test("user should see a error message when changing to grid size to be out of bo
 
 test("user should be able to paint (and erase) emojis on the grid", () => {
   // Given (a blank grid)
-  const { getByTestId, getByAltText } = render(<EmojiPaint />);
+  const { getByTestId, getByAltText } = render(<App />);
   const grid = getByTestId("grid");
   const brushButton = getByAltText("brush");
   const eraseButton = getByAltText("eraser");
@@ -110,7 +110,7 @@ test("user should be able to paint (and erase) emojis on the grid", () => {
 
 test(`user should be able to clear the grid by selecting the "clear" button`, () => {
   // Given (user paints first three cells of the first row)
-  const { getByText, getByTestId, getByAltText } = render(<EmojiPaint />);
+  const { getByText, getByTestId, getByAltText } = render(<App />);
   const grid = getByTestId("grid");
   const brushButton = getByAltText("brush");
   const firstRowCoords = [[0, 0], [0, 1], [0, 2]];
