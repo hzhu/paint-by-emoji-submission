@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import EmojiPicker from "./emoji-picker";
+import EmojiPicker from "../emoji-picker";
 import {
   MODE,
   EMOJIS,
@@ -9,12 +9,12 @@ import {
   MAX_HEIGHT,
   DEFAULT_WIDTH,
   DEFAULT_HEIGHT
-} from "./constants";
-import { copyToClipboard } from "./util";
+} from "../constants";
+import { copyToClipboard } from "../util";
 
-import "./emoji-paint.css";
+import "./index.css";
 
-const EmojiPaint = () => {
+const App = () => {
   const [mode, setMode] = useState();
   const [width, setWidth] = useState(DEFAULT_WIDTH);
   const [height, setHeight] = useState(DEFAULT_HEIGHT);
@@ -71,56 +71,58 @@ const EmojiPaint = () => {
   };
 
   return (
-    <div className="emoji-paint tc">
-      <EmojiToolbar
-        mode={mode}
-        width={width}
-        height={height}
-        setMode={setMode}
-        activeEmoji={activeEmoji}
-        setActiveEmoji={setActiveEmoji}
-        onWidthChange={onWidthChange}
-        onHeightChange={onHeightChange}
-      />
-      <ModePanel mode={mode} />
-      <EmojiGrid
-        grid={grid}
-        mode={mode}
-        emptyGrid={emptyGrid}
-        setEmptyGrid={setEmptyGrid}
-        activeEmoji={activeEmoji}
-        isPainting={isPainting}
-        setIsPainting={setIsPainting}
-      />
-      <div className="flex justify-end mh3">
-        <button
-          onClick={() => setEmptyGrid(true)}
-          className="ph3 br2 fw5 pointer"
-          style={{
-            border: "1px solid #bfc0c0"
-          }}
-        >
-          Clear
-        </button>
-        <button
-          onClick={() => copyToClipboard(grid)}
-          className="f6 fw6 ml2 white ph3 pv3 bn br2 pointer"
-          style={{ backgroundColor: "rgb(52, 175, 127)" }}
-        >
-          Copy to clipboard
-        </button>
-      </div>
-      <div className="pa3">
-        <span>
-          Learn how to add a <em>:blank:</em> emoji to your Slack workspace{" "}
-          <a
-            className="link bg-animate hover-bg-lightest-blue"
-            href="https://get.slack.help/hc/en-us/articles/206870177-Add-custom-emoji"
+    <div className="app">
+      <div className="emoji-paint tc">
+        <EmojiToolbar
+          mode={mode}
+          width={width}
+          height={height}
+          setMode={setMode}
+          activeEmoji={activeEmoji}
+          setActiveEmoji={setActiveEmoji}
+          onWidthChange={onWidthChange}
+          onHeightChange={onHeightChange}
+        />
+        <ModePanel mode={mode} />
+        <EmojiGrid
+          grid={grid}
+          mode={mode}
+          emptyGrid={emptyGrid}
+          setEmptyGrid={setEmptyGrid}
+          activeEmoji={activeEmoji}
+          isPainting={isPainting}
+          setIsPainting={setIsPainting}
+        />
+        <div className="flex justify-end mh3">
+          <button
+            onClick={() => setEmptyGrid(true)}
+            className="ph3 br2 fw5 pointer"
+            style={{
+              border: "1px solid #bfc0c0"
+            }}
           >
-            here
-          </a>
-          !
-        </span>
+            Clear
+          </button>
+          <button
+            onClick={() => copyToClipboard(grid)}
+            className="f6 fw6 ml2 white ph3 pv3 bn br2 pointer"
+            style={{ backgroundColor: "rgb(52, 175, 127)" }}
+          >
+            Copy to clipboard
+          </button>
+        </div>
+        <div className="pa3">
+          <span>
+            Learn how to add a <em>:blank:</em> emoji to your Slack workspace{" "}
+            <a
+              className="link bg-animate hover-bg-lightest-blue"
+              href="https://get.slack.help/hc/en-us/articles/206870177-Add-custom-emoji"
+            >
+              here
+            </a>
+            !
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -354,4 +356,4 @@ const ModePanel = ({ mode }) => (
   </div>
 );
 
-export default EmojiPaint;
+export default App;
