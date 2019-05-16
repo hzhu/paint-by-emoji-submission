@@ -23,6 +23,7 @@
 .emoji-paint__control {
   border-radius: 4px;
   border: 1px solid #aaa;
+  user-select: none;
   cursor: pointer;
   display: inline-block;
   float: left;

@@ -7,7 +7,6 @@ import {
   CollapsibleDropdown
 } from "listbox";
 import { EMOJI_PICKER, EMOJIS } from "./constants";
-import "./emoji-picker.css";
 
 const visuallyHiddenCSS = {
   border: 0,
