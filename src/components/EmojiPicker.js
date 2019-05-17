@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import {
   Listbox,
   OptionsList,
@@ -8,40 +9,7 @@ import {
 } from "listbox";
 import { EMOJI_PICKER, EMOJIS } from "../constants";
 
-const visuallyHiddenCSS = {
-  border: 0,
-  padding: 0,
-  width: "1px",
-  height: "1px",
-  margin: "-1px",
-  overflow: "hidden",
-  position: "absolute",
-  clip: "rect(0 0 0 0)"
-};
-
-const buttonStyle = {
-  width: "60px",
-  height: "44px",
-  float: "left",
-  padding: "2px",
-  fontSize: "28px",
-  cursor: "pointer",
-  overflow: "hidden",
-  lineHeight: "42px",
-  marginRight: "10px",
-  borderRadius: "4px",
-  display: "inline-block",
-  border: "1px solid #AAA"
-};
-
-const listboxStyle = {
-  top: "50px",
-  fontSize: "26px",
-  background: "#FFF",
-  position: "absolute"
-};
-
-export default ({ value, onSelect }) => {
+const EmojiPicker = ({ value, onSelect }) => {
   const [activeId, setActiveId] = useState();
   const [activeIndex, setActiveIndex] = useState();
   return (
@@ -49,12 +17,12 @@ export default ({ value, onSelect }) => {
       <CollapsibleDropdown style={{ display: "inline" }}>
         {expanded => (
           <>
-            <div style={visuallyHiddenCSS}>
-              <span id="emoji_btn_label">Choose an emoji</span>
-            </div>
+            <span id="emoji_btn_label" className="visually-hidden">
+              Choose an emoji
+            </span>
             <DropdownButton
-              style={buttonStyle}
               ariaLabelledBy="emoji_btn_label"
+              className="br2 fl pointer b--light-silver ep-btn"
             >
               {value}
             </DropdownButton>
@@ -64,9 +32,9 @@ export default ({ value, onSelect }) => {
                 focused
                 highlight
                 activeId={activeId}
-                style={listboxStyle}
                 activeIndex={activeIndex}
                 highlightedIndex={activeIndex}
+                className="bg-white absolute lb"
                 ariaLabelledBy="emoji_btn_label"
                 updateValue={({ activeId, activeIndex, selectedItem }) => {
                   onSelect(selectedItem);
@@ -104,3 +72,10 @@ export default ({ value, onSelect }) => {
     </>
   );
 };
+
+EmojiPicker.propTypes = {
+  value: PropTypes.string,
+  onSelect: PropTypes.func
+};
+
+export default EmojiPicker;

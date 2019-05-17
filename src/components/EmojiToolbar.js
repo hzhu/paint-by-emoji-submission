@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import EmojiPicker from "./EmojiPicker";
 import EmojiIcon from "./EmojiIcon";
 import {
@@ -21,58 +22,53 @@ const EmojiToolbar = ({
   onWidthChange,
   onHeightChange
 }) => (
-  <div className="emoji-paint__toolbar">
-    <div className="emoji-paint__controls">
+  <div className="bg-light-gray flex tb-padding">
+    <div className="flex-auto relative">
       <EmojiPicker
         value={activeEmoji}
-        onSelect={emoji => setActiveEmoji(emoji)}
+        onSelect={emoji => {
+          setActiveEmoji(emoji);
+          setMode(MODE.brush);
+        }}
       />
       <button
         onClick={() => setMode(MODE.brush)}
-        className={`emoji-paint__control ${
+        className={`ba br2 b--light-silver pointer dib fl overflow-hidden ep-ctrl ${
           mode === MODE.brush ? "b--green bw1" : ""
         }`}
       >
-        <img
-          className="emoji-paint__control_icon"
-          src="brush.png"
-          alt="brush"
-        />
+        <img className="h-100" src="brush.png" alt="brush" />
       </button>
       <button
         onClick={() => setMode(MODE.erase)}
-        className={`emoji-paint__control ${
+        className={`ba br2 b--light-silver pointer dib fl overflow-hidden ep-ctrl ${
           mode === MODE.erase ? "b--green bw1" : ""
         }`}
       >
-        <img
-          className="emoji-paint__control_icon"
-          src="eraser.png"
-          alt="eraser"
-        />
+        <img className="h-100" src="eraser.png" alt="eraser" />
       </button>
     </div>
     <div>
-      <label className="emoji-paint__dimension">
+      <label className="emoji-paint__dimension b ml3">
         Width
         <input
+          type="number"
           min={MIN_WIDTH}
           max={MAX_WIDTH}
-          type="number"
-          className="emoji-paint__dimension_input"
           onChange={onWidthChange}
           defaultValue={DEFAULT_WIDTH}
+          className="ml2 f6 ba b--light-silver br2 tc tb-ctrl-size"
         />
       </label>
-      <label className="emoji-paint__dimension">
+      <label className="emoji-paint__dimension b ml3">
         Height
         <input
+          type="number"
           min={MIN_HEIGHT}
           max={MAX_HEIGHT}
-          type="number"
-          className="emoji-paint__dimension_input"
           onChange={onHeightChange}
           defaultValue={DEFAULT_HEIGHT}
+          className="ml2 f6 ba b--light-silver br2 tc tb-ctrl-size"
         />
       </label>
       <div className="dark-red pt2 tl">
@@ -102,5 +98,16 @@ const EmojiToolbar = ({
     </div>
   </div>
 );
+
+EmojiToolbar.propTypes = {
+  mode: PropTypes.string,
+  width: PropTypes.number,
+  height: PropTypes.number,
+  setMode: PropTypes.func,
+  activeEmoji: PropTypes.string,
+  setActiveEmoji: PropTypes.func,
+  onWidthChange: PropTypes.func,
+  onHeightChange: PropTypes.func
+};
 
 export default EmojiToolbar;

@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import EmojiToolbar from "../components/EmojiToolbar";
+import ModePanel from "../components/ModePanel";
+import EmojiGrid from "../components/EmojiGrid";
+import EmojiFooter from "../components/EmojiFooter";
 import {
-  MODE,
-  EMOJIS,
   MIN_WIDTH,
   MIN_HEIGHT,
   MAX_WIDTH,
@@ -71,8 +72,8 @@ const App = () => {
   };
 
   return (
-    <div className="app">
-      <div className="emoji-paint tc">
+    <div className="app flex items-center flex-column justify-center h-100">
+      <div className="bg-white shadow-x-1 tc br3 ba b--light-silver overflow-hidden">
         <EmojiToolbar
           mode={mode}
           width={width}
@@ -96,166 +97,21 @@ const App = () => {
         <div className="flex justify-end mh3">
           <button
             onClick={() => setEmptyGrid(true)}
-            className="ph3 br2 fw5 pointer"
-            style={{
-              border: "1px solid #bfc0c0"
-            }}
+            className="ph3 br2 fw5 pointer b--light-silver"
           >
             Clear
           </button>
           <button
             onClick={() => copyToClipboard(grid)}
-            className="f6 fw6 ml2 white ph3 pv3 bn br2 pointer"
-            style={{ backgroundColor: "rgb(52, 175, 127)" }}
+            className="f6 fw6 ml2 white ph3 pv3 bn br2 pointer bg-light-green"
           >
             Copy to clipboard
           </button>
         </div>
-        <div className="pa3">
-          <span>
-            Learn how to add a <em>:blank:</em> emoji to your Slack workspace{" "}
-            <a
-              className="link bg-animate hover-bg-lightest-blue"
-              href="https://get.slack.help/hc/en-us/articles/206870177-Add-custom-emoji"
-            >
-              here
-            </a>
-            !
-          </span>
-        </div>
+        <EmojiFooter />
       </div>
     </div>
   );
 };
-
-const Comp = React.forwardRef(({ m, n, emptyGrid, setEmptyGrid }, ref) => {
-  const [content, setContent] = useState("");
-
-  useEffect(() => {
-    if (emptyGrid) {
-      setContent("");
-      setEmptyGrid(false);
-    }
-  }, [emptyGrid, setEmptyGrid]);
-
-  const onMouseDown = () => {
-    if (ref.current.mode === MODE.brush) {
-      setContent(ref.current.activeEmoji);
-    } else {
-      setContent("");
-    }
-  };
-
-  const onMouseEnter = () => {
-    if (ref.current.pressed) {
-      if (ref.current.mode === MODE.brush) {
-        setContent(ref.current.activeEmoji);
-      } else {
-        setContent("");
-      }
-    }
-  };
-  return (
-    <span
-      key={n}
-      role="img"
-      className="pa1"
-      aria-label={EMOJIS[content].name}
-      data-testid={`cell-${m}-${n}`}
-      style={{
-        width: "45px",
-        height: "45px",
-        fontSize: "37px",
-        userSelect: "none",
-        borderRight: "1px solid #d5d5d6",
-        borderBottom: "1px solid #d5d5d6"
-      }}
-      onMouseDown={onMouseDown}
-      onMouseEnter={onMouseEnter}
-    >
-      {content}
-    </span>
-  );
-});
-function areEqual(prevProps, nextProps) {
-  // See: https://reactjs.org/docs/react-api.html#reactmemo
-
-  // React.memo() is used to memoize a component by shallow comparing it's props.
-  // Here, it is used as an escape hatch so that each cell only renders based
-  // on its internal component state. State updates to parent components
-  // will not cause a render to the cells if `true` is returned from this `areEqual`
-  // function.
-
-  // This is improves rendering performance if the canvas is a 500x500 grid.
-  // We do not want to re-render 250,000 cells upon parent component state
-  // changes. For example, if the user selects the brush mode, and state for
-  // <EmojiPaint /> updates, it forces the entire subtree to re-render. That
-  // subtree could contain 250,000 grid cell components.
-
-  if (prevProps.emptyGrid !== nextProps.emptyGrid) {
-    // We want to control when cells reset their state when a user clicks the
-    // "Clear" button. Returning `false` here forces the children to render
-    // to it's initial empty state.
-    return false;
-  }
-
-  return true;
-}
-const GridCell = React.memo(Comp, areEqual);
-
-const EmojiGrid = ({ grid, mode, activeEmoji, emptyGrid, setEmptyGrid }) => {
-  const ref = useRef({});
-
-  useEffect(() => {
-    ref.current.mode = mode;
-    ref.current.activeEmoji = activeEmoji;
-  }, [mode, activeEmoji]);
-
-  return (
-    <div
-      data-testid="grid"
-      className={`ma3 br3 dib ${mode ? "pointer" : "not-allowed"}`}
-      style={{
-        border: "1px solid #a0a0a2"
-      }}
-      onMouseUp={() => (ref.current.pressed = false)}
-      onMouseDown={() => (ref.current.pressed = true)}
-      onMouseLeave={() => (ref.current.pressed = false)}
-      onContextMenu={() => (ref.current.pressed = false)}
-    >
-      {grid.map((row, m) => (
-        <div key={m} data-testid={`row-${m}`} className="flex">
-          {row.map((cell, n) => (
-            <GridCell
-              m={m}
-              n={n}
-              key={n}
-              ref={ref}
-              emptyGrid={emptyGrid}
-              setEmptyGrid={setEmptyGrid}
-            />
-          ))}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-const ModePanel = ({ mode }) => (
-  <div
-    className="pb3"
-    style={{
-      background: "#F9F9F9"
-    }}
-    aria-live="polite"
-  >
-    {mode ? (
-      <span>
-        You are in{" "}
-        <strong>{mode === MODE.brush ? "painting" : "erasing"}</strong> mode.
-      </span>
-    ) : null}
-  </div>
-);
 
 export default App;
