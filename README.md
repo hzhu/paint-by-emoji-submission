@@ -6,7 +6,7 @@ This exercise is not just a simple test to determine if you can code; we want it
 
 This exercise is very important in assessing your technical fit, so make sure you're happy with the result and that it reflects your skills. Your submission should be something you would be proud to submit on the job. Please commit your changes to a new branch in this repo, and once you're happy with the result, create a pull request with a description of your changes. **Please email the URL for the pull request back to us within one week** (but feel free to take the full time).
 
-Your changes will be graded based on adherence to product and design requirements, performance, browser support, code readibility and organization, error handling, lack of defects, and documentation. We'll get back to you within a week of your submission with the outcome. Please note that we will not provide you with detailed feedback on the exercise.
+Your changes will be graded based on adherence to product and design requirements, performance, browser support, code readability and organization, error handling, lack of defects, and documentation. We'll get back to you within a week of your submission with the outcome. Please note that we will not provide you with detailed feedback on the exercise.
 
 **We've provided some code to get you started, though there are a few bugs in there that you'll have to deal with first.** Let us know if you have any questions. Good luck! :four_leaf_clover:
 
@@ -53,8 +53,8 @@ We would like to provide users with a way to easily lay out emoji in a grid and 
 
 **Grid**
 * [x] :star: **P1**: As a user, I should be able to adjust the size of the grid by entering numbers into the Height and Width fields.
-* [ ] **P2**: As a user, I should be notified if I enter invalid data into the Height and Width fields (non-numerical data or numbers out of bounds.
-* [x] **P2**: As a user, I should be able to convert the emoji into shortcodes and have them be stored in my clipboard for later pasting (assume the existance of a `:blank:` emoji for the empty cells).
+* [x] **P2**: As a user, I should be notified if I enter invalid data into the Height and Width fields (non-numerical data or numbers out of bounds.
+* [x] **P2**: As a user, I should be able to convert the emoji into shortcodes and have them be stored in my clipboard for later pasting (assume the existence of a `:blank:` emoji for the empty cells).
 * [x] **P2**: As a user, I should be able to clear the canvas by clicking on the Clear button.
 
 **User experience**
