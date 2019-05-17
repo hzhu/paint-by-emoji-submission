@@ -38,7 +38,7 @@ const EmojiGrid = ({ grid, mode, activeEmoji, emptyGrid, setEmptyGrid }) => {
 };
 
 EmojiGrid.propTypes = {
-  grid: PropTypes.array,
+  grid: PropTypes.arrayOf(PropTypes.array),
   mode: PropTypes.string,
   activeEmoji: PropTypes.string,
   emptyGrid: PropTypes.bool,

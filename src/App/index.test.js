@@ -1,5 +1,11 @@
 import React from "react";
-import { wait, render, cleanup, fireEvent } from "react-testing-library";
+import {
+  wait,
+  render,
+  cleanup,
+  fireEvent,
+  prettyDOM
+} from "react-testing-library";
 import App from "./index";
 import {
   MAX_WIDTH,
@@ -45,50 +51,40 @@ test("user should be able to adjust size of the grid (e.g. from 10x8 to 3x3)", (
   }
 });
 
-test("user should be able to paint the canvas & copy emoji shortcodes to clipboard", async done => {
-  // Given (user paints first three cells of the first row)
-  const { getByText, getByTestId, getByAltText } = render(<App />);
-  const grid = getByTestId("grid");
+test("user should see (or hear) text indicating current mode when the paint/brush button is selected", () => {
+  // Given
+  const PAINT_MODE = "You are in painting mode.";
+  const ERASING_MODE = "You are in erasing mode.";
+  const { getByAltText, queryAllByText } = render(<App />);
   const brushButton = getByAltText("brush");
-  const firstRowCoords = [[0, 0], [0, 1], [0, 2]];
-  const getCell = ([m, n]) => getByTestId(`cell-${m}-${n}`);
-  firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
-  fireEvent.click(brushButton);
-  fireEvent.mouseDown(grid);
-  firstRowCoords.forEach(coord => fireEvent.mouseEnter(getCell(coord)));
-  fireEvent.mouseUp(grid);
-  firstRowCoords.forEach(coord =>
-    expect(getCell(coord).textContent).toBe("😀")
+  const eraseButton = getByAltText("eraser");
+  var [modeElement] = queryAllByText(
+    (_, { textContent }) => textContent === PAINT_MODE
   );
-  console.log = jest.fn();
-  const writeText = jest.fn(() => Promise.resolve());
-  window.navigator.clipboard = { writeText };
-  expect(writeText).toHaveBeenCalledTimes(0); // nothing should be in the clipboard
+  expect(modeElement).toBe(undefined);
 
-  // When (user selects the copy button)
-  const copyButton = getByText("Copy to clipboard");
-  fireEvent.click(copyButton);
+  // When
+  fireEvent.click(brushButton);
 
-  // Then (emoji shortcodes are copied to their clipboard)
-  const AFTER_CLIPBOARD = `:grinning::grinning::grinning::blank::blank::blank::blank::blank::blank::blank:
-:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
-:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
-:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
-:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
-:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
-:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
-:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:`;
+  // Then
+  var [modeElement] = queryAllByText(
+    (_, { textContent }) => textContent === PAINT_MODE
+  );
+  expect(modeElement.textContent).toBe(PAINT_MODE);
+  expect(modeElement).toHaveAttribute("aria-live", "polite");
 
-  expect(writeText).toHaveBeenCalledWith(AFTER_CLIPBOARD);
-  expect(writeText).toHaveBeenCalledTimes(1);
-  await wait(() => {
-    expect(console.log).toHaveBeenCalledWith("Copied to clipboard");
-    expect(console.log).toHaveBeenCalledTimes(1);
-    done();
-  });
+  // And when
+  fireEvent.click(eraseButton);
+
+  // And then
+  var [modeElement] = queryAllByText(
+    (_, { textContent }) => textContent === ERASING_MODE
+  );
+  expect(modeElement.textContent).toBe(ERASING_MODE);
+  expect(modeElement).toHaveAttribute("aria-live", "polite");
 });
 
-test("user should see a error message when changing to grid size to be out of bounds", () => {
+test("user should see (or hear) error message when changing grid size to be out of bounds", () => {
   // Given
   const { getByLabelText, queryAllByTestId } = render(<App />);
   const widthInput = getByLabelText("Width");
@@ -115,6 +111,8 @@ test("user should see a error message when changing to grid size to be out of bo
   expect(heightError.textContent).toBe(
     `⚠️ The minimum height is ${MIN_HEIGHT}`
   );
+  expect(widthError.parentElement).toHaveAttribute("aria-live", "polite");
+  expect(heightError.parentElement).toHaveAttribute("aria-live", "polite");
 
   // And when
   fireEvent.change(widthInput, { target: { value: -5 } });
@@ -156,7 +154,7 @@ test("user should be able to paint (and erase) emojis on the grid", () => {
   firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
 });
 
-test(`user should be able to clear the grid by selecting the "clear" button`, () => {
+test("user should be able to paint the canvas & copy emoji shortcodes to clipboard", async done => {
   // Given (user paints first three cells of the first row)
   const { getByText, getByTestId, getByAltText } = render(<App />);
   const grid = getByTestId("grid");
@@ -177,41 +175,49 @@ test(`user should be able to clear the grid by selecting the "clear" button`, ()
   expect(writeText).toHaveBeenCalledTimes(0); // nothing should be in the clipboard
   expect(console.log).toHaveBeenCalledTimes(0);
 
+  // When (user selects the copy button)
+  const copyButton = getByText("Copy to clipboard");
+  fireEvent.click(copyButton);
+
+  // Then (emoji shortcodes are copied to their clipboard)
+  const AFTER_CLIPBOARD = `:grinning::grinning::grinning::blank::blank::blank::blank::blank::blank::blank:
+:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
+:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
+:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
+:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
+:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
+:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
+:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:`;
+
+  expect(writeText).toHaveBeenCalledWith(AFTER_CLIPBOARD);
+  expect(writeText).toHaveBeenCalledTimes(1);
+  await wait(() => {
+    expect(console.log).toHaveBeenCalledWith("Copied to clipboard");
+    expect(console.log).toHaveBeenCalledTimes(1);
+    done();
+  });
+});
+
+test(`user should be able to clear the grid by selecting the "clear" button`, () => {
+  // Given (user paints first three cells of the first row)
+  const { getByText, getByTestId, getByAltText } = render(<App />);
+  const grid = getByTestId("grid");
+  const brushButton = getByAltText("brush");
+  const firstRowCoords = [[0, 0], [0, 1], [0, 2]];
+  const getCell = ([m, n]) => getByTestId(`cell-${m}-${n}`);
+  firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
+  fireEvent.click(brushButton);
+  fireEvent.mouseDown(grid);
+  firstRowCoords.forEach(coord => fireEvent.mouseEnter(getCell(coord)));
+  fireEvent.mouseUp(grid);
+  firstRowCoords.forEach(coord =>
+    expect(getCell(coord).textContent).toBe("😀")
+  );
+
   // When (user selects the "Clear" button)
   const clearButton = getByText("Clear");
   fireEvent.click(clearButton);
 
   // Then (the painted cells are emptied)
   firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
-});
-
-test("user should see text indicating current mode when the paint/brush button is selected", () => {
-  // Given
-  const PAINT_MODE = "You are in painting mode.";
-  const ERASING_MODE = "You are in erasing mode.";
-  const { getByAltText, queryAllByText } = render(<App />);
-  const brushButton = getByAltText("brush");
-  const eraseButton = getByAltText("eraser");
-  var [modeElement] = queryAllByText(
-    (_, { textContent }) => textContent === PAINT_MODE
-  );
-  expect(modeElement).toBe(undefined);
-
-  // When
-  fireEvent.click(brushButton);
-
-  // Then
-  var [modeElement] = queryAllByText(
-    (_, { textContent }) => textContent === PAINT_MODE
-  );
-  expect(modeElement.textContent).toBe(PAINT_MODE);
-
-  // And when
-  fireEvent.click(eraseButton);
-
-  // And then
-  var [modeElement] = queryAllByText(
-    (_, { textContent }) => textContent === ERASING_MODE
-  );
-  expect(modeElement.textContent).toBe(ERASING_MODE);
 });
