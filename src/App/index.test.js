@@ -13,6 +13,11 @@ import "jest-dom/extend-expect";
 
 afterEach(cleanup);
 
+test("renders the application correctly (snapshot test)", () => {
+  const { container } = render(<App />);
+  expect(container).toMatchSnapshot();
+});
+
 test("user should be able to adjust size of the grid (e.g. from 10x8 to 3x3)", () => {
   // Given
   const NEW_WIDTH = 3;
@@ -22,10 +27,10 @@ test("user should be able to adjust size of the grid (e.g. from 10x8 to 3x3)", (
   const widthInput = getByLabelText("Width");
   const heightInput = getByLabelText("Height");
 
-  expect(grid.children.length).toBe(DEFAULT_HEIGHT);
+  expect(grid.children.length).toBe(DEFAULT_HEIGHT); // grid starts with default height
   for (let i = 0; i < grid.children.length; i++) {
     const row = grid.children[i];
-    expect(row.children.length).toBe(DEFAULT_WIDTH);
+    expect(row.children.length).toBe(DEFAULT_WIDTH); // grid starts with default width
   }
 
   // When
@@ -130,4 +135,35 @@ test(`user should be able to clear the grid by selecting the "clear" button`, ()
 
   // Then (the painted cells are emptied)
   firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
+});
+
+test("user should see text indicating current mode when the paint/brush button is selected", () => {
+  // Given
+  const PAINT_MODE = "You are in painting mode.";
+  const ERASING_MODE = "You are in erasing mode.";
+  const { getByAltText, queryAllByText } = render(<App />);
+  const brushButton = getByAltText("brush");
+  const eraseButton = getByAltText("eraser");
+  var [modeElement] = queryAllByText(
+    (_, { textContent }) => textContent === PAINT_MODE
+  );
+  expect(modeElement).toBe(undefined);
+
+  // When
+  fireEvent.click(brushButton);
+
+  // Then
+  var [modeElement] = queryAllByText(
+    (_, { textContent }) => textContent === PAINT_MODE
+  );
+  expect(modeElement.textContent).toBe(PAINT_MODE);
+
+  // And when
+  fireEvent.click(eraseButton);
+
+  // And then
+  var [modeElement] = queryAllByText(
+    (_, { textContent }) => textContent === ERASING_MODE
+  );
+  expect(modeElement.textContent).toBe(ERASING_MODE);
 });
