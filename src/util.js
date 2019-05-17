@@ -5,7 +5,7 @@ export const copyToClipboard = grid => {
   grid.forEach((row, m) => {
     row.forEach((_, n) => {
       const key = document.querySelector(`[data-testid='cell-${m}-${n}']`)
-        .innerText;
+        .textContent;
       str += EMOJIS[key].shortcode;
     });
     str += "\n";

@@ -1,5 +1,5 @@
 import React from "react";
-import { render, cleanup, fireEvent, prettyDOM } from "react-testing-library";
+import { wait, render, cleanup, fireEvent } from "react-testing-library";
 import App from "./index";
 import {
   MAX_WIDTH,
@@ -43,6 +43,49 @@ test("user should be able to adjust size of the grid (e.g. from 10x8 to 3x3)", (
     const row = grid.children[i];
     expect(row.children.length).toBe(NEW_WIDTH);
   }
+});
+
+test("user should be able to paint the canvas & copy emoji shortcodes to clipboard", async done => {
+  // Given (user paints first three cells of the first row)
+  const { getByText, getByTestId, getByAltText } = render(<App />);
+  const grid = getByTestId("grid");
+  const brushButton = getByAltText("brush");
+  const firstRowCoords = [[0, 0], [0, 1], [0, 2]];
+  const getCell = ([m, n]) => getByTestId(`cell-${m}-${n}`);
+  firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
+  fireEvent.click(brushButton);
+  fireEvent.mouseDown(grid);
+  firstRowCoords.forEach(coord => fireEvent.mouseEnter(getCell(coord)));
+  fireEvent.mouseUp(grid);
+  firstRowCoords.forEach(coord =>
+    expect(getCell(coord).textContent).toBe("😀")
+  );
+  console.log = jest.fn();
+  const writeText = jest.fn(() => Promise.resolve());
+  window.navigator.clipboard = { writeText };
+  expect(writeText).toHaveBeenCalledTimes(0); // nothing should be in the clipboard
+
+  // When (user selects the copy button)
+  const copyButton = getByText("Copy to clipboard");
+  fireEvent.click(copyButton);
+
+  // Then (emoji shortcodes are copied to their clipboard)
+  const AFTER_CLIPBOARD = `:grinning::grinning::grinning::blank::blank::blank::blank::blank::blank::blank:
+:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
+:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
+:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
+:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
+:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
+:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:
+:blank::blank::blank::blank::blank::blank::blank::blank::blank::blank:`;
+
+  expect(writeText).toHaveBeenCalledWith(AFTER_CLIPBOARD);
+  expect(writeText).toHaveBeenCalledTimes(1);
+  await wait(() => {
+    expect(console.log).toHaveBeenCalledWith("Copied to clipboard");
+    expect(console.log).toHaveBeenCalledTimes(1);
+    done();
+  });
 });
 
 test("user should see a error message when changing to grid size to be out of bounds", () => {
@@ -128,6 +171,11 @@ test(`user should be able to clear the grid by selecting the "clear" button`, ()
   firstRowCoords.forEach(coord =>
     expect(getCell(coord).textContent).toBe("😀")
   );
+  console.log = jest.fn();
+  const writeText = jest.fn(() => Promise.resolve());
+  window.navigator.clipboard = { writeText };
+  expect(writeText).toHaveBeenCalledTimes(0); // nothing should be in the clipboard
+  expect(console.log).toHaveBeenCalledTimes(0);
 
   // When (user selects the "Clear" button)
   const clearButton = getByText("Clear");
