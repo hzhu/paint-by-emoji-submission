@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  wait,
-  render,
-  cleanup,
-  fireEvent,
-  prettyDOM
-} from "react-testing-library";
+import { wait, render, cleanup, fireEvent } from "react-testing-library";
 import App from "./index";
 import {
   MAX_WIDTH,
@@ -155,13 +149,17 @@ test("user should be able to paint (and erase) emojis on the grid", () => {
 });
 
 test("user should be able to paint the canvas & copy emoji shortcodes to clipboard", async done => {
-  // Given (user paints first three cells of the first row)
+  console.log = jest.fn();
+  const writeText = jest.fn(() => Promise.resolve());
+  window.navigator.clipboard = { writeText };
   const { getByText, getByTestId, getByAltText } = render(<App />);
   const grid = getByTestId("grid");
   const brushButton = getByAltText("brush");
   const firstRowCoords = [[0, 0], [0, 1], [0, 2]];
   const getCell = ([m, n]) => getByTestId(`cell-${m}-${n}`);
   firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
+
+  // Given (user paints first three cells of the first row)
   fireEvent.click(brushButton);
   fireEvent.mouseDown(grid);
   firstRowCoords.forEach(coord => fireEvent.mouseEnter(getCell(coord)));
@@ -169,9 +167,6 @@ test("user should be able to paint the canvas & copy emoji shortcodes to clipboa
   firstRowCoords.forEach(coord =>
     expect(getCell(coord).textContent).toBe("😀")
   );
-  console.log = jest.fn();
-  const writeText = jest.fn(() => Promise.resolve());
-  window.navigator.clipboard = { writeText };
   expect(writeText).toHaveBeenCalledTimes(0); // nothing should be in the clipboard
   expect(console.log).toHaveBeenCalledTimes(0);
 
@@ -248,18 +243,20 @@ test(`user should be able to clear the grid by selecting the "clear" button`, ()
 });
 
 test('user is switched to "painting" mode when the erase button is selected & user clicks "clear"', () => {
-  // Given (user paints first three cells of first row & selects erase mode)
   const PAINT_MODE = "You are in painting mode.";
   const ERASING_MODE = "You are in erasing mode.";
   const { getByText, getByTestId, getByAltText, queryAllByText } = render(
     <App />
   );
   const grid = getByTestId("grid");
+  const clearButton = getByText("Clear");
   const brushButton = getByAltText("brush");
   const eraseButton = getByAltText("eraser");
   const firstRowCoords = [[0, 0], [0, 1], [0, 2]];
   const getCell = ([m, n]) => getByTestId(`cell-${m}-${n}`);
   firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
+
+  // Given (user paints first three cells of first row & selects erase mode)
   fireEvent.click(brushButton);
   var [modeElement] = queryAllByText(
     (_, { textContent }) => textContent === PAINT_MODE
@@ -278,10 +275,9 @@ test('user is switched to "painting" mode when the erase button is selected & us
   expect(modeElement.textContent).toBe(ERASING_MODE);
 
   // When (user selects the "Clear" button)
-  const clearButton = getByText("Clear");
   fireEvent.click(clearButton);
 
-  // Then (painted cells are emptied, user returned to painting mode)
+  // Then (painted cells are emptied & user is returned to painting mode)
   firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
   var [modeElement] = queryAllByText(
     (_, { textContent }) => textContent === PAINT_MODE

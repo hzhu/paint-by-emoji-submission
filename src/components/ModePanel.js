@@ -3,13 +3,7 @@ import { MODE } from "../constants";
 import PropTypes from "prop-types";
 
 const ModePanel = ({ mode }) => (
-  <div
-    className="pb3"
-    style={{
-      background: "#F9F9F9"
-    }}
-    aria-live="polite"
-  >
+  <div className="pb3 bg-light-gray" aria-live="polite">
     {mode ? (
       <span>
         You are in{" "}

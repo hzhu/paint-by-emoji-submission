@@ -1,4 +1,8 @@
-import { EMOJIS } from "./constants";
+import { EMOJIS, DEFAULT_WIDTH, DEFAULT_HEIGHT } from "./constants";
+
+export const makeGrid = (width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT) => {
+  return [...Array(height)].map(() => [...Array(width)].map(() => ""));
+};
 
 export const copyToClipboard = async grid => {
   let str = ``;

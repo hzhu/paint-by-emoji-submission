@@ -49,7 +49,7 @@ const EmojiToolbar = ({
       </button>
     </div>
     <div>
-      <label className="emoji-paint__dimension b ml3">
+      <label className="b ml3">
         Width
         <input
           type="number"
@@ -60,7 +60,7 @@ const EmojiToolbar = ({
           className="ml2 f6 ba b--light-silver br2 tc tb-ctrl-size"
         />
       </label>
-      <label className="emoji-paint__dimension b ml3">
+      <label className="b ml3">
         Height
         <input
           type="number"

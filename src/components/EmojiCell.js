@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
 import { EMOJIS, MODE } from "../constants";
 
-const Cell = React.forwardRef(({ m, n, emptyGrid, setEmptyGrid }, ref) => {
+const Cell = forwardRef(({ m, n, emptyGrid, setEmptyGrid }, ref) => {
   const [content, setContent] = useState("");
 
   useEffect(() => {

@@ -55,7 +55,7 @@ exports[`renders the application correctly (snapshot test) 1`] = `
         </div>
         <div>
           <label
-            class="emoji-paint__dimension b ml3"
+            class="b ml3"
           >
             Width
             <input
@@ -67,7 +67,7 @@ exports[`renders the application correctly (snapshot test) 1`] = `
             />
           </label>
           <label
-            class="emoji-paint__dimension b ml3"
+            class="b ml3"
           >
             Height
             <input
@@ -92,8 +92,7 @@ exports[`renders the application correctly (snapshot test) 1`] = `
       </div>
       <div
         aria-live="polite"
-        class="pb3"
-        style="background: rgb(249, 249, 249);"
+        class="pb3 bg-light-gray"
       />
       <div
         class="ma3 br3 dib b--gray not-allowed"
@@ -101,7 +100,6 @@ exports[`renders the application correctly (snapshot test) 1`] = `
       >
         <div
           class="flex"
-          data-testid="row-0"
         >
           <span
             aria-label="blank emoji"
@@ -166,7 +164,6 @@ exports[`renders the application correctly (snapshot test) 1`] = `
         </div>
         <div
           class="flex"
-          data-testid="row-1"
         >
           <span
             aria-label="blank emoji"
@@ -231,7 +228,6 @@ exports[`renders the application correctly (snapshot test) 1`] = `
         </div>
         <div
           class="flex"
-          data-testid="row-2"
         >
           <span
             aria-label="blank emoji"
@@ -296,7 +292,6 @@ exports[`renders the application correctly (snapshot test) 1`] = `
         </div>
         <div
           class="flex"
-          data-testid="row-3"
         >
           <span
             aria-label="blank emoji"
@@ -361,7 +356,6 @@ exports[`renders the application correctly (snapshot test) 1`] = `
         </div>
         <div
           class="flex"
-          data-testid="row-4"
         >
           <span
             aria-label="blank emoji"
@@ -426,7 +420,6 @@ exports[`renders the application correctly (snapshot test) 1`] = `
         </div>
         <div
           class="flex"
-          data-testid="row-5"
         >
           <span
             aria-label="blank emoji"
@@ -491,7 +484,6 @@ exports[`renders the application correctly (snapshot test) 1`] = `
         </div>
         <div
           class="flex"
-          data-testid="row-6"
         >
           <span
             aria-label="blank emoji"
@@ -556,7 +548,6 @@ exports[`renders the application correctly (snapshot test) 1`] = `
         </div>
         <div
           class="flex"
-          data-testid="row-7"
         >
           <span
             aria-label="blank emoji"
@@ -634,24 +625,22 @@ exports[`renders the application correctly (snapshot test) 1`] = `
           Copy to clipboard
         </button>
       </div>
-      <div
-        class="pa3"
+      <span
+        class="db pa3"
       >
-        <span>
-          Learn how to add a 
-          <em>
-            :blank:
-          </em>
-           emoji to your Slack workspace
-           
-          <a
-            class="link bg-animate hover-bg-lightest-blue"
-            href="https://get.slack.help/hc/en-us/articles/206870177-Add-custom-emoji"
-          >
-            here!
-          </a>
-        </span>
-      </div>
+        Learn how to add a 
+        <em>
+          :blank:
+        </em>
+         emoji to your Slack workspace
+         
+        <a
+          class="link bg-animate hover-bg-lightest-blue"
+          href="https://get.slack.help/hc/en-us/articles/206870177-Add-custom-emoji"
+        >
+          here!
+        </a>
+      </span>
     </div>
   </div>
 </div>

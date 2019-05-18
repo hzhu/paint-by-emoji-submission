@@ -20,7 +20,7 @@ const EmojiGrid = ({ grid, mode, activeEmoji, emptyGrid, setEmptyGrid }) => {
       onContextMenu={() => (ref.current.pressed = false)}
     >
       {grid.map((row, m) => (
-        <div key={m} data-testid={`row-${m}`} className="flex">
+        <div key={m} className="flex">
           {row.map((_, n) => (
             <EmojiCell
               m={m}
