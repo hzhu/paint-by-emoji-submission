@@ -198,6 +198,31 @@ test("user should be able to paint the canvas & copy emoji shortcodes to clipboa
   });
 });
 
+test("alerts the user & suggests they try a different web browser if copying to clipboard fails", () => {
+  // Given
+  const browserError = new Error("This browser doesn't support Clipboard API.");
+  const { getByText } = render(<App />);
+  console.error = jest.fn();
+  window.alert = jest.fn();
+  window.navigator.clipboard = {
+    writeText: () => {
+      throw browserError;
+    }
+  };
+
+  // When (user selects the copy button, but copying fails)
+  const copyButton = getByText("Copy to clipboard");
+  fireEvent.click(copyButton);
+
+  // Then
+  expect(window.alert).toHaveBeenCalledTimes(1);
+  expect(window.alert).toHaveBeenCalledWith(
+    "Could not copy text please try a different web browser."
+  );
+  expect(console.error).toHaveBeenCalledTimes(1);
+  expect(console.error).toHaveBeenCalledWith(browserError);
+});
+
 test(`user should be able to clear the grid by selecting the "clear" button`, () => {
   // Given (user paints first three cells of the first row)
   const { getByText, getByTestId, getByAltText } = render(<App />);
