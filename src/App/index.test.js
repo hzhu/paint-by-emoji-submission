@@ -221,3 +221,45 @@ test(`user should be able to clear the grid by selecting the "clear" button`, ()
   // Then (the painted cells are emptied)
   firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
 });
+
+test('user is switched to "painting" mode when the erase button is selected & user clicks "clear"', () => {
+  // Given (user paints first three cells of first row & selects erase mode)
+  const PAINT_MODE = "You are in painting mode.";
+  const ERASING_MODE = "You are in erasing mode.";
+  const { getByText, getByTestId, getByAltText, queryAllByText } = render(
+    <App />
+  );
+  const grid = getByTestId("grid");
+  const brushButton = getByAltText("brush");
+  const eraseButton = getByAltText("eraser");
+  const firstRowCoords = [[0, 0], [0, 1], [0, 2]];
+  const getCell = ([m, n]) => getByTestId(`cell-${m}-${n}`);
+  firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
+  fireEvent.click(brushButton);
+  var [modeElement] = queryAllByText(
+    (_, { textContent }) => textContent === PAINT_MODE
+  );
+  expect(modeElement.textContent).toBe(PAINT_MODE);
+  fireEvent.mouseDown(grid);
+  firstRowCoords.forEach(coord => fireEvent.mouseEnter(getCell(coord)));
+  fireEvent.mouseUp(grid);
+  firstRowCoords.forEach(coord =>
+    expect(getCell(coord).textContent).toBe("😀")
+  );
+  fireEvent.click(eraseButton);
+  var [modeElement] = queryAllByText(
+    (_, { textContent }) => textContent === ERASING_MODE
+  );
+  expect(modeElement.textContent).toBe(ERASING_MODE);
+
+  // When (user selects the "Clear" button)
+  const clearButton = getByText("Clear");
+  fireEvent.click(clearButton);
+
+  // Then (painted cells are emptied, user returned to painting mode)
+  firstRowCoords.forEach(coord => expect(getCell(coord).textContent).toBe(""));
+  var [modeElement] = queryAllByText(
+    (_, { textContent }) => textContent === PAINT_MODE
+  );
+  expect(modeElement.textContent).toBe(PAINT_MODE);
+});

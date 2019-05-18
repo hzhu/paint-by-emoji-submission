@@ -9,7 +9,8 @@ import {
   MAX_WIDTH,
   MAX_HEIGHT,
   DEFAULT_WIDTH,
-  DEFAULT_HEIGHT
+  DEFAULT_HEIGHT,
+  MODE
 } from "../constants";
 import { copyToClipboard } from "../util";
 
@@ -71,6 +72,11 @@ const App = () => {
     setGrid(newGrid);
   };
 
+  const onClear = () => {
+    if (mode === MODE.erase) setMode(MODE.brush);
+    setEmptyGrid(true);
+  };
+
   return (
     <div className="app flex items-center flex-column justify-center h-100">
       <div className="bg-white shadow-x-1 tc br3 ba b--light-silver overflow-hidden">
@@ -96,7 +102,7 @@ const App = () => {
         />
         <div className="flex justify-end mh3">
           <button
-            onClick={() => setEmptyGrid(true)}
+            onClick={onClear}
             className="ph3 br2 fw5 pointer b--light-silver"
           >
             Clear
