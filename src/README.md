@@ -154,3 +154,13 @@ It's common the have error messages appear in red underneath the input. I decide
 * [x] **P2**: As a user, I should be able to use all of the features of the emoji layout tool in the latest versions of Chrome and Firefox without experiencing bugs.
 
 **Thanks for reading my pull request description! 👊** 
+
+This [ref](https://reactjs.org/docs/hooks-reference.html#useref) will persist throughout the full lifecycle of the component. It passes along a couple of important values that `<EmojiCell>` uses such as `pressed`, `mode`, and `activeEmoji`. 
+
+I am passing these values using a `ref` rather than props to `<EmojiCell>` because I used `React.memo` [here](https://github.com/SlackRecruiting/fe-code-exercise-104563275/pull/1/files#diff-4709e944711535dd8c243c6512f248acR70) prevent parent component state changes to cause rendering of the grid's cells. Rendering grid cells can be expensive for large grids like 500x500.
+
+A `<GridCell>` will not render based on its props. The reason for this is that I used `React.memo` to bail out of renders because renders caused by props was expensive. If the user changed their `activeEmoji` or `mode` state, and we have a 500x500 grid, it would result in a render for 250,000 `<EmojiCell>` components.
+
+Instead, each `<EmojiCell>` is responsible for rendering itself after their initial mounting. They each contain local component state that's updated based on user events (e.g. mouseEnter) and persisted values from the ref (`pressed`, `activeEmoji`, and `mode`).
+
+⚠️ This code is added for demonstration purposes so that large grids can paint slightly faster. 
